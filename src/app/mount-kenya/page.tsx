@@ -1,5 +1,5 @@
 import Header from "@/components/Header";
-import SEO from "@/components/SEO";
+
 import { Button } from "@/components/ui/button";
 import {
   Card,
