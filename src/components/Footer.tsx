@@ -29,7 +29,7 @@ const Footer = () => {
             </h3>
             <p className="text-green-100 leading-relaxed">
               Your trusted partner for authentic Kenyan adventures. From Mount
-              Kenya`&apos;`s peaks to the savannas of Maasai Mara, we create
+              Kenya&apos;s peaks to the savannas of Maasai Mara, we create
               unforgettable experiences.
             </p>
             <div className="flex space-x-4">
