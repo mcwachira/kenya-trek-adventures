@@ -72,7 +72,7 @@ const MountKenya = () => {
               <span className="block text-orange-400">Expeditions</span>
             </h1>
             <p className="text-xl md:text-2xl mb-8 text-gray-200 max-w-2xl mx-auto">
-              Challenge yourself on Africa's second highest peak. Multiple
+              Challenge yourself on Africa&apos;s second highest peak. Multiple
               routes to Point Lenana (4,985m) with expert guides.
             </p>
             <Button
@@ -141,7 +141,7 @@ const MountKenya = () => {
         <section className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto bg-green-50 dark:bg-gray-800 rounded-2xl my-16">
           <div className="text-center mb-12">
             <h3 className="text-3xl font-bold text-green-800 dark:text-green-400 mb-4">
-              What`&rsquo;s Included
+              What&apos;s Included
             </h3>
             <p className="text-lg text-gray-600 dark:text-gray-300">
               Everything you need for a safe and successful summit attempt

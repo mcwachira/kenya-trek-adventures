@@ -29,8 +29,8 @@ const FeaturedExpeditions = () => {
               Featured Expeditions
             </h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Carefully curated adventures that showcase the best of Kenya's
-              natural wonders
+              Carefully curated adventures that showcase the best of
+              Kenya&apos;s natural wonders
             </p>
           </div>
 
@@ -139,7 +139,7 @@ const FeaturedExpeditions = () => {
             Featured Expeditions
           </h2>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Carefully curated adventures that showcase the best of Kenya's
+            Carefully curated adventures that showcase the best of Kenya&apos;s
             natural wonders
           </p>
         </div>

@@ -1,6 +1,5 @@
 import Header from "@/components/Header";
 
-import SEO from "@/components/SEO";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -134,8 +133,8 @@ const DayTrips = () => {
               <span className="block text-orange-400">Adventures</span>
             </h1>
             <p className="text-xl md:text-2xl mb-8 text-gray-200 max-w-2xl mx-auto">
-              Perfect for short visits and family adventures. Explore Kenya's
-              wonders in a single day.
+              Perfect for short visits and family adventures. Explore
+              Kenya&apos;s wonders in a single day.
             </p>
             <Button
               size="lg"

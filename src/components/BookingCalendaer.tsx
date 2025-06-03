@@ -50,6 +50,8 @@ const BookingCalendar = ({ onClose }: BookingCalendarProps) => {
     },
   ];
 
+  const expedition = expeditions.find((e) => e.id === selectedExpedition);
+
   const addOnOptions = [
     { id: "porter", name: "Personal Porter", price: 25 },
     { id: "gear-rental", name: "Gear Rental Package", price: 35 },
@@ -213,14 +215,12 @@ const BookingCalendar = ({ onClose }: BookingCalendarProps) => {
                 Booking Summary
               </h3>
               <div className="space-y-2 text-sm">
-                <div className="flex justify-between">
-                  <span>Expedition ({groupSize} people)</span>
-                  <span>
-                    $
-                    {expeditions.find((e) => e.id === selectedExpedition)
-                      ?.price! * groupSize}
-                  </span>
-                </div>
+                {expedition && (
+                  <div className="flex justify-between">
+                    <span>Expedition ({groupSize} people)</span>
+                    <span>${expedition.price * groupSize}</span>
+                  </div>
+                )}
                 {addOns.map((addOnId) => {
                   const addOn = addOnOptions.find((a) => a.id === addOnId);
                   return addOn ? (

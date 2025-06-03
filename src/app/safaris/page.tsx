@@ -1,6 +1,5 @@
 import Header from "@/components/Header";
 
-import SEO from "@/components/SEO";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -96,8 +95,8 @@ const Safaris = () => {
               <span className="block text-orange-400">Safaris</span>
             </h1>
             <p className="text-xl md:text-2xl mb-8 text-gray-200 max-w-2xl mx-auto">
-              Witness the Big Five and experience the Great Migration in Kenya's
-              world-famous national parks.
+              Witness the Big Five and experience the Great Migration in
+              Kenya&apos;s world-famous national parks.
             </p>
             <Button
               size="lg"
@@ -115,7 +114,7 @@ const Safaris = () => {
               Safari Destinations
             </h2>
             <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-              Choose from Kenya's most spectacular wildlife destinations
+              Choose from Kenya&apos;s most spectacular wildlife destinations
             </p>
           </div>
 
