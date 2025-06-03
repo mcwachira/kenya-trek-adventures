@@ -1,5 +1,6 @@
 "use client";
 import Hero from "@/components/Hero";
+import ServiceCards from "@/components/ServiceCards";
 import { useState } from "react";
 
 export default function Home() {
@@ -7,6 +8,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-50 to-orange-50 dark:from-gray-900 dark:to-gray-800">
       <Hero onBookNow={() => setShowBooking(true)} />
+      <ServiceCards />
     </div>
   );
 }
