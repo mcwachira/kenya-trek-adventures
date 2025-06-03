@@ -52,7 +52,8 @@ const Testimonials = () => {
             What Our Adventurers Say
           </h2>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Real experiences from travelers who've explored Kenya with us
+            Real experiences from travelers who`&lsquo;`ve explored Kenya with
+            us
           </p>
         </div>
 
@@ -80,9 +81,7 @@ const Testimonials = () => {
 
               <div className="mb-3">{renderStars(testimonial.rating)}</div>
 
-              <p className="text-gray-700 mb-4 italic">
-                "{testimonial.comment}"
-              </p>
+              <p className="text-gray-700 mb-4 italic">{testimonial.comment}</p>
 
               <div className="text-sm text-orange-600 font-medium">
                 {testimonial.expedition}

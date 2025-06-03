@@ -1,6 +1,7 @@
 "use client";
 import BookingCalendar from "@/components/BookingCalendaer";
 import FeaturedExpeditions from "@/components/FeaturedExpeditions";
+import GuideProfile from "@/components/GuideProfile";
 import Hero from "@/components/Hero";
 import ServiceCards from "@/components/ServiceCards";
 import Testimonials from "@/components/Testimonials";
@@ -15,6 +16,7 @@ export default function Home() {
       <FeaturedExpeditions />
       {showBooking && <BookingCalendar onClose={() => setShowBooking(false)} />}
       <Testimonials />
+      <GuideProfile />
     </div>
   );
 }
