@@ -54,7 +54,7 @@ const Contact = () => {
                   Send us a Message
                 </CardTitle>
                 <CardDescription>
-                  Tell us about your dream adventure and we'll create a
+                  Tell us about your dream adventure and we&aposll create a
                   personalized itinerary
                 </CardDescription>
               </CardHeader>

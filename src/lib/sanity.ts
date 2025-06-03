@@ -1,3 +1,5 @@
+import { BlockContent } from "./portableText";
+
 export interface ItineraryDay {
   day: number;
   title: string;
@@ -58,5 +60,5 @@ export interface Post {
     slug?: { current: string };
   }>;
   publishedAt: string; // ISO datetime
-  body: any; // “blockContent”—Portable Text array (adjust to your Portable Text type if needed)
+  body: BlockContent; // “blockContent”—Portable Text array (adjust to your Portable Text type if needed)
 }
