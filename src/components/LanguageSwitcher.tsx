@@ -14,7 +14,7 @@ const LanguageSwitcher = () => {
   ];
 
   const currentLanguage =
-    languages.find((lang) => lang.code === i18n.lamnguage) || languages[0];
+    languages.find((lang) => lang.code === i18n.language) || languages[0];
 
   const changeLanguage = (langCode: string) => {
     i18n.changeLanguage(langCode);
@@ -37,16 +37,18 @@ const LanguageSwitcher = () => {
       </Button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-48 bg-white rounded-md  shadow-lg border border-gray-200 z-50">
+        <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg border border-gray-200 z-50">
           {languages.map((lang) => (
-            <Button
+            <button
               key={lang.code}
               onClick={() => changeLanguage(lang.code)}
-              className={`w-full px-4 text-left hover:bg-gray-100 flex items-center space-x-2 ${i18n.language === lang.code ? "bg-green-50 text-green-700" : ""}`}
+              className={`w-full px-4 py-2 text-left hover:bg-gray-100 flex items-center space-x-2 ${
+                i18n.language === lang.code ? "bg-green-50 text-green-700" : ""
+              }`}
             >
               <span>{lang.flag}</span>
               <span>{lang.name}</span>
-            </Button>
+            </button>
           ))}
         </div>
       )}
