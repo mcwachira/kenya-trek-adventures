@@ -3,6 +3,7 @@ import BookingCalendar from "@/components/BookingCalendaer";
 import FeaturedExpeditions from "@/components/FeaturedExpeditions";
 import Hero from "@/components/Hero";
 import ServiceCards from "@/components/ServiceCards";
+import Testimonials from "@/components/Testimonials";
 import { useState } from "react";
 
 export default function Home() {
@@ -13,6 +14,7 @@ export default function Home() {
       <ServiceCards />
       <FeaturedExpeditions />
       {showBooking && <BookingCalendar onClose={() => setShowBooking(false)} />}
+      <Testimonials />
     </div>
   );
 }
