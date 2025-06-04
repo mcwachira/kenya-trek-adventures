@@ -45,15 +45,14 @@ const Testimonials = () => {
   };
 
   return (
-    <section className="py-20 bg-white">
+    <section className="py-20 bg-white  dark:from-gray-900 dark:bg-gray-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <h2 className="text-4xl font-bold text-green-800 mb-4">
             What Our Adventurers Say
           </h2>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Real experiences from travelers who`&lsquo;`ve explored Kenya with
-            us
+            Real experiences from travelers who&lsquo;ve explored Kenya with us
           </p>
         </div>
 
