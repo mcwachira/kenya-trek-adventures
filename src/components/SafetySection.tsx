@@ -48,13 +48,16 @@ const SafetySection = () => {
   ];
 
   return (
-    <section id="safety" className="py-20 bg-white">
+    <section
+      id="safety"
+      className="py-20 border-t border-green-700 bg-white  dark:from-gray-900 dark:bg-gray-800 boder-b"
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <h2 className="text-4xl font-bold text-green-800 mb-4">
             Your Safety is Our Priority
           </h2>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+          <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
             Comprehensive safety measures and emergency protocols ensure peace
             of mind throughout your adventure
           </p>
@@ -73,7 +76,7 @@ const SafetySection = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600 text-center">
+                <p className="text-gray-600 dark:text-gray-300 text-center">
                   {feature.description}
                 </p>
               </CardContent>

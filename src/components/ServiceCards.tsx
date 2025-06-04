@@ -63,7 +63,7 @@ const ServiceCards = () => {
   return (
     <section
       id="services"
-      className="py-20 bg-white dark:from-gray-900 dark:bg-gray-800"
+      className="py-20 border-t border-green-700 bg-white dark:from-gray-900 dark:bg-gray-800"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
