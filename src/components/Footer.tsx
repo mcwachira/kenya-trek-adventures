@@ -19,7 +19,7 @@ const Footer = () => {
   ];
 
   return (
-    <footer className="bg-green-800 text-white">
+    <footer className="bg-green-800 text-white dark:from-gray-900 dark:bg-gray-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Company Info */}
@@ -104,7 +104,7 @@ const Footer = () => {
               </div>
             </div>
 
-            <div className="mt-6 p-4 bg-green-700 rounded-lg">
+            <div className="mt-6 p-4 bg-green-700 dark:bg-gray-600 rounded-lg">
               <h5 className="font-semibold text-orange-400 mb-2">
                 WhatsApp Booking
               </h5>
