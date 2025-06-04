@@ -20,7 +20,7 @@ const Header = () => {
     { name: "Contact", href: "/contact" },
 
     // temporary
-    { name: "Dashboard", href: "/dashboard" },
+    // { name: "Dashboard", href: "/dashboard" },
   ];
 
   return (
