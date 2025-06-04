@@ -1,9 +1,9 @@
 import { Button } from "@/components/ui/button";
 import { ArrowDown } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+// import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import BookingForm from "./BookingForm";
+// import BookingForm from "./BookingForm";
 
 interface HeroProps {
   onBookNow: () => void;
