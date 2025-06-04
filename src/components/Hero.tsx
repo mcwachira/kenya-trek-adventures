@@ -6,11 +6,11 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import BookingForm from "./BookingForm";
 
-// interface HeroProps {
-//   onBookNow: () => void;
-// }
+interface HeroProps {
+  onBookNow: () => void;
+}
 
-const Hero = () => {
+const Hero = ({ onBookNow }: HeroProps) => {
   const { t } = useTranslation();
   const [showBooking, setShowBooking] = useState(false);
 
