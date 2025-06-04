@@ -22,7 +22,7 @@ const FeaturedExpeditions = () => {
 
   if (isLoading) {
     return (
-      <section className="py-20 bg-gradient-to-b from-green-50 to-orange-50">
+      <section className="py-20 bg-gradient-to-b from-green-50 to-orange-50 dark:from-gray-900 dark:bg-gray-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-green-800 mb-4">
@@ -62,7 +62,7 @@ const FeaturedExpeditions = () => {
 
   if (error) {
     return (
-      <section className="py-20 bg-gradient-to-b from-green-50 to-orange-50">
+      <section className="py-20 bg-gradient-to-b from-green-50 to-orange-50 dark:from-gray-900 dark:bg-gray-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <h2 className="text-4xl font-bold text-green-800 mb-4">
@@ -132,7 +132,7 @@ const FeaturedExpeditions = () => {
     tours && tours.length > 0 ? tours.slice(0, 3) : defaultExpeditions;
 
   return (
-    <section className="py-20 bg-gradient-to-b from-green-50 to-orange-50">
+    <section className="py-20   dark:from-gray-900 dark:bg-gray-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <h2 className="text-4xl font-bold text-green-800 mb-4">
@@ -148,7 +148,7 @@ const FeaturedExpeditions = () => {
           {expeditions.map((expedition, index) => (
             <div
               key={expedition._id}
-              className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
+              className="bg-white  dark:from-gray-900 dark:bg-gray-800 rounded-xl shadow-xl overflow-hidden hover:shadow-xl transition-shadow duration-300"
             >
               <div className="relative h-64">
                 <img
@@ -203,7 +203,7 @@ const FeaturedExpeditions = () => {
                   </Button>
                   <Button
                     variant="outline"
-                    className="border-orange-300 text-orange-600 hover:bg-orange-50"
+                    className="border-orange-300 text-orange-600 hover:bg-orange-50 dark:bg-green-700 dark:text-white"
                   >
                     Book Now
                   </Button>
