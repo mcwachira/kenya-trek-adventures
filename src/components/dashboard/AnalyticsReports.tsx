@@ -11,7 +11,7 @@ interface Booking {
 interface AnalyticsReportsProps {
   bookings: Booking[];
 }
-
+/* eslint-disable  @typescript-eslint/no-explicit-any */
 const AnalyticsReports = ({ bookings }: AnalyticsReportsProps) => {
   const serviceStats = bookings.reduce((acc: any, booking) => {
     acc[booking.service] = (acc[booking.service] || 0) + 1;
