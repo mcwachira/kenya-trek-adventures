@@ -8,7 +8,7 @@ import {
   Clock,
   MapPin,
   ArrowUpRight,
-  ArrowDownRight,
+  // ArrowDownRight,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
@@ -40,7 +40,7 @@ interface DashboardOverviewProps {
   contacts: Contact[];
 }
 
-const DashboardOverView = ({ bookings, contacts }: DashboardOverViewProps) => {
+const DashboardOverView = ({ bookings, contacts }: DashboardOverviewProps) => {
   const currentMonth = new Date().getMonth();
   const currentYear = new Date().getFullYear();
 
