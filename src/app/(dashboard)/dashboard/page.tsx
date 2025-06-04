@@ -1,27 +1,16 @@
 "use client";
 import { useState, useEffect } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  Calendar,
-  Mail,
-  Phone,
-  User,
-  MapPin,
-  Users,
-  TrendingUp,
-  DollarSign,
-  Activity,
-  Clock,
-  Plus,
-  Edit,
-  Trash2,
-  Download,
-  Filter,
-} from "lucide-react";
+
 import DashboardOverview from "@/components/dashboard/DashboardOverview";
+import BookingManagement from "@/components/dashboard/BookingManagement";
+import CustomerManagement from "@/components/dashboard/CustomerManagement";
+import PaymentManagement from "@/components/dashboard/PaymentManagent";
+import TourManagement from "@/components/dashboard/TourManagment";
+import AnalyticsReports from "@/components/dashboard/AnalyticsReports";
+import ContentManagement from "@/components/dashboard/ContentManagement";
+import DashboardSettings from "@/components/dashboard/DashBoardSettings";
+import NotificationCenter from "@/components/dashboard/NotificationCenter";
 
 interface Booking {
   id: number;
@@ -45,7 +34,8 @@ interface Contact {
   message: string;
   createdAt: string;
 }
-const DashBoard = () => {
+
+const Dashboard = () => {
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [contacts, setContacts] = useState<Contact[]>([]);
   const [activeTab, setActiveTab] = useState("overview");
@@ -64,16 +54,19 @@ const DashBoard = () => {
     setBookings(updatedBookings);
     localStorage.setItem("bookings", JSON.stringify(updatedBookings));
   };
+
   const deleteBooking = (id: number) => {
     const updatedBookings = bookings.filter((booking) => booking.id !== id);
     setBookings(updatedBookings);
     localStorage.setItem("bookings", JSON.stringify(updatedBookings));
   };
+
   const deleteContact = (id: number) => {
     const updatedContacts = contacts.filter((contact) => contact.id !== id);
     setContacts(updatedContacts);
     localStorage.setItem("contacts", JSON.stringify(updatedContacts));
   };
+
   return (
     <>
       <div className="min-h-screen bg-gradient-to-b from-green-50 to-orange-50 dark:from-gray-900 dark:to-gray-800">
@@ -93,7 +86,7 @@ const DashBoard = () => {
             onValueChange={setActiveTab}
             className="w-full"
           >
-            <TabsList className="mb-8 grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-9 min-w-max gap-2 ">
+            <TabsList className="grid grid-cols-5 lg:grid-cols-9 mb-8">
               <TabsTrigger value="overview">Overview</TabsTrigger>
               <TabsTrigger value="tours">Tours</TabsTrigger>
               <TabsTrigger value="bookings">Bookings</TabsTrigger>
@@ -109,38 +102,43 @@ const DashBoard = () => {
               <DashboardOverview bookings={bookings} contacts={contacts} />
             </TabsContent>
 
-            <TabsContent value="tours">{/* <TourManagement /> */}</TabsContent>
+            <TabsContent value="tours">
+              <TourManagement />
+            </TabsContent>
 
             <TabsContent value="bookings">
-              {/* <BookingManagement
-                  bookings={bookings}
-                  updateBookingStatus={updateBookingStatus}
-                  deleteBooking={deleteBooking}
-                /> */}
+              <BookingManagement
+                bookings={bookings}
+                updateBookingStatus={updateBookingStatus}
+                deleteBooking={deleteBooking}
+              />
             </TabsContent>
 
             <TabsContent value="customers">
-              {/* <CustomerManagement contacts={contacts} deleteContact={deleteContact} /> */}
+              <CustomerManagement
+                contacts={contacts}
+                deleteContact={deleteContact}
+              />
             </TabsContent>
 
             <TabsContent value="payments">
-              {/* <PaymentManagement bookings={bookings} /> */}
+              <PaymentManagement bookings={bookings} />
             </TabsContent>
 
             <TabsContent value="analytics">
-              {/* <AnalyticsReports bookings={bookings} /> */}
+              <AnalyticsReports bookings={bookings} />
             </TabsContent>
 
             <TabsContent value="content">
-              {/* <ContentManagement /> */}
+              <ContentManagement />
             </TabsContent>
 
             <TabsContent value="settings">
-              {/* <DashboardSettings /> */}
+              <DashboardSettings />
             </TabsContent>
 
             <TabsContent value="notifications">
-              {/* <NotificationCenter bookings={bookings} contacts={contacts} /> */}
+              <NotificationCenter bookings={bookings} contacts={contacts} />
             </TabsContent>
           </Tabs>
         </div>
@@ -149,4 +147,4 @@ const DashBoard = () => {
   );
 };
 
-export default DashBoard;
+export default Dashboard;
