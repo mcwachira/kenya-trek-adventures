@@ -178,9 +178,11 @@ const FeaturedExpeditions = () => {
                 <h3 className="text-xl font-bold text-green-800 mb-2">
                   {expedition.title}
                 </h3>
-                <p className="text-gray-600 mb-4">{expedition.route}</p>
+                <p className="text-gray-600 dark:text-gray-300 mb-4">
+                  {expedition.route}
+                </p>
 
-                <div className="flex justify-between items-center mb-4 text-sm text-gray-500">
+                <div className="flex justify-between items-center mb-4 text-sm text-gray-500 dark:text-gray-300">
                   <span>{expedition.duration} Days</span>
                   <span>Max Elevation: {expedition.elevation}</span>
                 </div>
@@ -189,7 +191,7 @@ const FeaturedExpeditions = () => {
                   {expedition.highlights?.slice(0, 3).map((highlight, idx) => (
                     <div
                       key={idx}
-                      className="flex items-center text-sm text-gray-600"
+                      className="flex items-center text-sm text-gray-600 dark:text-gray-300"
                     >
                       <div className="w-2 h-2 bg-orange-400 rounded-full mr-3"></div>
                       {highlight}

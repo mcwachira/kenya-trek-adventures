@@ -51,7 +51,7 @@ const Testimonials = () => {
           <h2 className="text-4xl font-bold text-green-800 mb-4">
             What Our Adventurers Say
           </h2>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+          <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
             Real experiences from travelers who&lsquo;ve explored Kenya with us
           </p>
         </div>

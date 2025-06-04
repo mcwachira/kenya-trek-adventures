@@ -70,7 +70,7 @@ const ServiceCards = () => {
           <h2 className="text-4xl font-bold text-green-800 mb-4">
             Choose Your Adventure
           </h2>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+          <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
             From challenging mountain expeditions to relaxing safari
             experiences, we offer adventures for every type of traveler.
           </p>
@@ -97,7 +97,7 @@ const ServiceCards = () => {
                 <CardTitle className="text-green-800">
                   {service.title}
                 </CardTitle>
-                <CardDescription className="text-gray-600">
+                <CardDescription className="text-gray-600 dark:text-gray-300">
                   {service.description}
                 </CardDescription>
               </CardHeader>
@@ -105,14 +105,18 @@ const ServiceCards = () => {
               <CardContent>
                 <div className="space-y-3 mb-6">
                   <div className="flex justify-between text-sm">
-                    <span className="text-gray-500">Duration:</span>
-                    <span className="font-semibold text-green-700">
+                    <span className="text-gray-500 dark:text-gray-300">
+                      Duration:
+                    </span>
+                    <span className="font-semibold text-green-700 dark:text-gray-300">
                       {service.duration}
                     </span>
                   </div>
                   <div className="flex justify-between text-sm">
-                    <span className="text-gray-500">Difficulty:</span>
-                    <span className="font-semibold text-green-700">
+                    <span className="text-gray-500 dark:text-gray-300">
+                      Difficulty:
+                    </span>
+                    <span className="font-semibold text-green-700 dark:text-gray-300">
                       {service.difficulty}
                     </span>
                   </div>
@@ -122,7 +126,7 @@ const ServiceCards = () => {
                   {service.features.map((feature, idx) => (
                     <li
                       key={idx}
-                      className="text-sm text-gray-600 flex items-center"
+                      className="text-sm text-gray-600 dark:text-gray-300 flex items-center"
                     >
                       <div className="w-2 h-2 bg-orange-400 rounded-full mr-3"></div>
                       {feature}
