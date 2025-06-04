@@ -1,4 +1,3 @@
-"use client";
 import { Button } from "@/components/ui/button";
 import { ArrowDown } from "lucide-react";
 import Link from "next/link";
@@ -12,7 +11,7 @@ interface HeroProps {
 
 const Hero = ({ onBookNow }: HeroProps) => {
   const { t } = useTranslation();
-  const [showBooking, setShowBooking] = useState(false);
+  // const [showBooking, setShowBooking] = useState(false);
 
   return (
     <>
@@ -38,7 +37,7 @@ const Hero = ({ onBookNow }: HeroProps) => {
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
             <Button
-              onClick={() => setShowBooking(true)}
+              onClick={onBookNow}
               size="lg"
               className="bg-orange-600 hover:bg-orange-700 text-white px-8 py-4 text-lg font-semibold transition-all duration-300 hover:scale-105"
             >
@@ -87,7 +86,7 @@ const Hero = ({ onBookNow }: HeroProps) => {
         </div>
       </section>
 
-      {showBooking && <BookingForm onClose={() => setShowBooking(false)} />}
+      {/* {showBooking && <BookingForm onClose={() => setShowBooking(false)} />} */}
     </>
   );
 };

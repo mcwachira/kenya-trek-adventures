@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+
 import {
   Mountain,
   Users,
@@ -46,30 +46,30 @@ const About = () => {
     },
   ];
 
-  const team = [
-    {
-      name: "Nelson Machua",
-      role: "Founder & Lead Guide",
-      experience: "15+ years",
-      specialties: ["Mount Kenya", "Wildlife Photography"],
-      image:
-        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
-    },
-    // {
-    //   name: "Sarah Wanjiku",
-    //   role: "Safari Guide & Wildlife Expert",
-    //   experience: "12+ years",
-    //   specialties: ["Big Five Tracking", "Bird Watching"],
-    //   image: "https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80"
-    // },
-    // {
-    //   name: "David Kiprop",
-    //   role: "Mountain Guide",
-    //   experience: "10+ years",
-    //   specialties: ["Technical Climbing", "High Altitude Trekking"],
-    //   image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80"
-    // }
-  ];
+  // const team = [
+  //   {
+  //     name: "Nelson Machua",
+  //     role: "Founder & Lead Guide",
+  //     experience: "15+ years",
+  //     specialties: ["Mount Kenya", "Wildlife Photography"],
+  //     image:
+  //       "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80",
+  //   },
+  //   {
+  //     name: "Sarah Wanjiku",
+  //     role: "Safari Guide & Wildlife Expert",
+  //     experience: "12+ years",
+  //     specialties: ["Big Five Tracking", "Bird Watching"],
+  //     image: "https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80"
+  //   },
+  //   {
+  //     name: "David Kiprop",
+  //     role: "Mountain Guide",
+  //     experience: "10+ years",
+  //     specialties: ["Technical Climbing", "High Altitude Trekking"],
+  //     image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80"
+  //   }
+  // ];
 
   return (
     <div className="min-h-screen  bg-gradient-to-b from-green-50 to-orange-50 dark:from-gray-900 dark:to-gray-800">
@@ -113,10 +113,10 @@ const About = () => {
                 cultural day trips.
               </p>
               <p>
-                Today, we're proud to be one of Kenya's most trusted adventure
-                tour operators, with a team of certified guides who are not just
-                experts in their fields, but also passionate ambassadors for
-                Kenya's natural heritage.
+                Today, we&apos;re proud to be one of Kenya&apos;s most trusted
+                adventure tour operators, with a team of certified guides who
+                are not just experts in their fields, but also passionate
+                ambassadors for Kenya&apos;s natural heritage.
               </p>
             </div>
           </div>
@@ -232,8 +232,8 @@ const About = () => {
               Wildlife Safaris
             </h4>
             <p className="text-gray-600 dark:text-gray-300">
-              Experience Kenya's incredible wildlife in world-famous parks like
-              Maasai Mara, Amboseli, and Tsavo.
+              Experience Kenya&apos;s incredible wildlife in world-famous parks
+              like Maasai Mara, Amboseli, and Tsavo.
             </p>
           </div>
           <div className="text-center">
@@ -244,7 +244,7 @@ const About = () => {
               Day Adventures
             </h4>
             <p className="text-gray-600 dark:text-gray-300">
-              Perfect for short visits. Explore Hell&lsquos Gate, Lake Nakuru,
+              Perfect for short visits. Explore Hell&apos;s Gate, Lake Nakuru,
               coffee farms, and cultural sites near Nairobi.
             </p>
           </div>
