@@ -16,21 +16,21 @@ const GuideProfile = () => {
   return (
     <section
       id="about"
-      className="py-20 bg-gradient-to-b from-orange-50 to-green-50"
+      className="py-20 dark:text-white  dark:from-gray-900 dark:bg-gray-800 "
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div>
-            <h2 className="text-4xl font-bold text-green-800 mb-6">
+            <h2 className="text-4xl font-bold text-green-800  mb-6">
               Meet Your Expert Guide
             </h2>
 
             <div className="space-y-6">
               <div>
-                <h3 className="text-2xl font-semibold text-green-700 mb-3">
+                <h3 className="text-2xl font-semibold text-green-700  mb-3">
                   David Kamau
                 </h3>
-                <p className="text-gray-700 leading-relaxed">
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
                   With over 15 years of experience guiding adventurers through
                   Kenya`&lsquo;`s most spectacular landscapes, David combines
                   deep local knowledge with international safety standards to
@@ -43,19 +43,19 @@ const GuideProfile = () => {
                   Experience Highlights
                 </h4>
                 <ul className="space-y-2">
-                  <li className="flex items-center text-gray-700">
+                  <li className="flex items-center text-gray-700 dark:text-gray-300">
                     <div className="w-2 h-2 bg-orange-400 rounded-full mr-3"></div>
                     500+ successful Mount Kenya summits
                   </li>
-                  <li className="flex items-center text-gray-700">
+                  <li className="flex items-center text-gray-700 dark:text-gray-300">
                     <div className="w-2 h-2 bg-orange-400 rounded-full mr-3"></div>
                     Led expeditions for clients from 35+ countries
                   </li>
-                  <li className="flex items-center text-gray-700">
+                  <li className="flex items-center text-gray-700 dark:text-gray-300">
                     <div className="w-2 h-2 bg-orange-400 rounded-full mr-3"></div>
                     Expert in wildlife tracking and behavior
                   </li>
-                  <li className="flex items-center text-gray-700">
+                  <li className="flex items-center text-gray-700 dark:text-gray-300">
                     <div className="w-2 h-2 bg-orange-400 rounded-full mr-3"></div>
                     Certified in high-altitude rescue techniques
                   </li>
@@ -88,7 +88,7 @@ const GuideProfile = () => {
                     <Badge
                       key={index}
                       variant="outline"
-                      className="border-orange-300 text-orange-700"
+                      className="border-orange-300 text-orange-700 dark:text-gray-300"
                     >
                       {language}
                     </Badge>
