@@ -25,7 +25,7 @@ const Header = () => {
 
   return (
     <header className="fixed top-0 w-full bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm border-b border-green-100 dark:border-gray-800 z-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 xl:px-8">
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center">
             <Link
@@ -37,7 +37,7 @@ const Header = () => {
           </div>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex space-x-8">
+          <nav className="hidden xl:flex space-x-8">
             {navigation.map((item) =>
               item.href.startsWith("#") ? (
                 <a
@@ -59,7 +59,7 @@ const Header = () => {
             )}
           </nav>
 
-          <div className="hidden md:flex items-center space-x-4">
+          <div className="hidden xl:flex items-center space-x-4">
             <ThemeToggle />
             <LanguageSwitcher />
             <Link href="/contact">
@@ -70,7 +70,7 @@ const Header = () => {
           </div>
 
           {/* Mobile menu button */}
-          <div className="md:hidden flex items-center space-x-2">
+          <div className="xl:hidden flex items-center space-x-2">
             <ThemeToggle />
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -83,7 +83,7 @@ const Header = () => {
 
         {/* Mobile Navigation */}
         {isMenuOpen && (
-          <div className="md:hidden">
+          <div className="xl:hidden">
             <div className="px-2 pt-2 pb-3 space-y-1 bg-white dark:bg-gray-900 border-t border-green-100 dark:border-gray-800">
               {navigation.map((item) =>
                 item.href.startsWith("#") ? (

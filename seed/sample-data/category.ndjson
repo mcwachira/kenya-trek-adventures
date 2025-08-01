@@ -1,0 +1,5 @@
+{"_id": "category-73a5ac9f", "_type": "category", "name": "Category 1", "slug": {"_type": "slug", "current": "category-1"}, "description": "This is a description for Category 1."}
+{"_id": "category-dfc444aa", "_type": "category", "name": "Category 2", "slug": {"_type": "slug", "current": "category-2"}, "description": "This is a description for Category 2."}
+{"_id": "category-e21a9b4e", "_type": "category", "name": "Category 3", "slug": {"_type": "slug", "current": "category-3"}, "description": "This is a description for Category 3."}
+{"_id": "category-da6f8093", "_type": "category", "name": "Category 4", "slug": {"_type": "slug", "current": "category-4"}, "description": "This is a description for Category 4."}
+{"_id": "category-bcce2226", "_type": "category", "name": "Category 5", "slug": {"_type": "slug", "current": "category-5"}, "description": "This is a description for Category 5."}
