@@ -14,11 +14,11 @@ interface HeroProps {
 
 const Hero = ({ onBookNow }: HeroProps) => {
   const { t } = useTranslation();
-
+    console.log("HeroImage:", HeroImage);
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <section className="relative min-h-screen  flex items-center justify-center overflow-hidden">
       {/* Background Image with Overlay */}
-      <div className="absolute inset-0 -z-10">
+      <div className="absolute inset-0 z-0">
         <Image
           src={HeroImage}
           alt="Hero Background"
@@ -26,7 +26,7 @@ const Hero = ({ onBookNow }: HeroProps) => {
           className="object-cover"
           priority
         />
-        <div className="absolute inset-0 bg-black/40" />
+        <div className="absolute inset-0 bg-black/50" />
       </div>
 
       {/* Content */}
