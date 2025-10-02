@@ -337,7 +337,7 @@ const TourManagement = () => {
                   />
                 </div>
               </div>
-
+img
               <div className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div>
@@ -618,11 +618,15 @@ const TourManagement = () => {
                 >
                   <div className="relative h-48">
                     {tour.image ? (
-                      <img
-                        src={tour.image}
-                        alt={tour.title}
-                        className="w-full h-full object-cover"
-                      />
+
+                        <Image
+                            src={tour.image}
+                            alt={tour.title}
+                            fill
+                            className="object-cover"
+                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                            priority
+                        />
                     ) : (
                       <div className="w-full h-full bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center">
                         <Mountain className="h-12 w-12 text-white" />

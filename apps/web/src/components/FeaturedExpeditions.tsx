@@ -9,6 +9,7 @@ import Image, { StaticImageData } from "next/image";
 import Aberdare from "@/assets/Aberdare-Forest.jpg";
 import Amboseli from "@/assets/amboseli-national-park.jpg";
 import HellsGate from "@/assets/hells-gate.jpg";
+import {Tour} from "@/hooks/useToursData";
 
 type Expedition = {
     _id: string;
@@ -85,7 +86,7 @@ const FeaturedExpeditions = () => {
     const defaultImages: StaticImageData[] = [Aberdare, Amboseli, HellsGate];
 
     const expeditions: Expedition[] =
-        tours && tours.length > 0 ? (tours as Expedition[]).slice(0, 3) : defaultExpeditions;
+        tours && tours.length > 0 ? (tours as Tour[]).slice(0, 3) : defaultExpeditions;
 
     if (loading) {
         return (
