@@ -10,6 +10,14 @@ import {
 } from "@/components/ui/card";
 import { Clock, MapPin, Users, Camera } from "lucide-react";
 
+import LakeNakuru from "@/assets/lake-nakuru.jpg";
+import KiambuCoffee from "@/assets/kiambu-coffee-farms.jpg";
+import NairobiNationalPark from "@/assets/Nairobi-park.jpg"
+import HellsGate from "@/assets/hells-gate.jpg"
+import OlPajeta from "@/assets/Ol-Pejeta-Conservancy.jpg"
+import LakeNaivasha from "@/assets/lake-naivasha.jpg"
+import Image from "next/image";
+
 const DayTrips = () => {
   const dayTrips = [
     {
@@ -18,7 +26,7 @@ const DayTrips = () => {
       distance: "90km from Nairobi",
       price: "$120",
       image:
-        "https://images.unsplash.com/photo-1433086966358-54859d0ed716?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+       HellsGate,
       activities: [
         "Rock Climbing",
         "Cycling",
@@ -34,7 +42,7 @@ const DayTrips = () => {
       distance: "160km from Nairobi",
       price: "$180",
       image:
-        "https://images.unsplash.com/photo-1472396961693-142e6e269027?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+        LakeNakuru,
       activities: [
         "Game Drives",
         "Flamingo Watching",
@@ -49,7 +57,7 @@ const DayTrips = () => {
       distance: "10km from Nairobi",
       price: "$80",
       image:
-        "https://images.unsplash.com/photo-1466721591366-2d5fba72006d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+      NairobiNationalPark,
       activities: [
         "Game Drives",
         "Lion Viewing",
@@ -65,7 +73,7 @@ const DayTrips = () => {
       distance: "200km from Nairobi",
       price: "$220",
       image:
-        "https://images.unsplash.com/photo-1469041797191-50ace28483c3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+      OlPajeta,
       activities: [
         "Rhino Sanctuary",
         "Chimpanzee Sanctuary",
@@ -81,7 +89,7 @@ const DayTrips = () => {
       distance: "90km from Nairobi",
       price: "$150",
       image:
-        "https://images.unsplash.com/photo-1482938289607-e9573fc25ebb?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+       LakeNaivasha,
       activities: [
         "Boat Safari",
         "Hippo Watching",
@@ -97,7 +105,7 @@ const DayTrips = () => {
       distance: "30km from Nairobi",
       price: "$60",
       image:
-        "https://images.unsplash.com/photo-1433086966358-54859d0ed716?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+        KiambuCoffee,
       activities: [
         "Coffee Tasting",
         "Farm Tours",
@@ -163,16 +171,19 @@ const DayTrips = () => {
                 key={index}
                 className="bg-white dark:bg-gray-800 overflow-hidden hover:shadow-lg transition-shadow"
               >
-                <div className="relative h-48">
-                  <img
-                    src={trip.image}
-                    alt={trip.name}
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute top-4 right-4 bg-orange-600 text-white px-3 py-1 rounded-full text-sm font-semibold">
-                    {trip.price}
+                  <div className="relative w-full aspect-video">
+                      <Image
+                          src={trip.image}
+                          alt={trip.name}
+                          fill
+                          className="object-cover"
+                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                          priority={index === 0} // make the first image preload
+                      />
+                      <div className="absolute top-4 right-4 bg-orange-600 text-white px-3 py-1 rounded-full text-sm font-semibold">
+                          {trip.price}
+                      </div>
                   </div>
-                </div>
                 <CardHeader>
                   <CardTitle className="text-green-800 dark:text-green-400">
                     {trip.name}
