@@ -7,6 +7,7 @@ import SafetySection from "@/components/SafetySection";
 import ServiceCards from "@/components/ServiceCards";
 import Testimonials from "@/components/Testimonials";
 import { useState } from "react";
+import BookingForm from "@/components/BookingForm";
 
 export default function Home() {
   const [showBooking, setShowBooking] = useState(false);
@@ -15,8 +16,9 @@ export default function Home() {
       <Hero onBookNow={() => setShowBooking(true)} />
       <ServiceCards />
       <FeaturedExpeditions />
-      {showBooking && <BookingCalendar onClose={() => setShowBooking(false)} />}
+      {showBooking && <BookingForm onClose={() => setShowBooking(false)} />}
       {/*<Testimonials />*/}
+
       <GuideProfile />
       <SafetySection />
     </div>
