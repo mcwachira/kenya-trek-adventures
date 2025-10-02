@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/card";
 import { Mountain, Clock, CheckCircle } from "lucide-react";
 import {useState} from "react";
-import {useToursByCategory} from "@/hooks/useToursData";
+// import {useToursByCategory} from "@/hooks/useToursData";
 import BookingForm from "@/components/BookingForm";
 
 const MountKenya = () => {

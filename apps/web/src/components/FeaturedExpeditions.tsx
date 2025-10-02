@@ -8,7 +8,6 @@ import { urlFor } from "@/sanity/lib/image";
 import Image from "next/image";
 import Aberdare from "@/assets/Aberdare-Forest.jpg"
 import Amboseli from "@/assets/amboseli-national-park.jpg"
-import MassaiMara from "@/assets/massai-mara.jpg"
 import HellsGate from "@/assets/hells-gate.jpg"
 
 const FeaturedExpeditions = () => {

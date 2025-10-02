@@ -54,7 +54,7 @@ const Contact = () => {
                   Send us a Message
                 </CardTitle>
                 <CardDescription>
-                  Tell us about your dream adventure and we&aposll create a
+                  Tell us about your dream adventure and we will create a
                   personalized itinerary
                 </CardDescription>
               </CardHeader>
@@ -138,31 +138,31 @@ const Contact = () => {
 
             {/* Contact Info Cards */}
             <div className="space-y-6">
-              <Card className="bg-white dark:bg-gray-800">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2 text-green-800 dark:text-green-400">
-                    <MapPin className="h-6 w-6" />
-                    Visit Our Office
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-gray-600 dark:text-gray-300 mb-4">
-                    Kenya Trek Adventures
-                    <br />
-                    Westlands Business Center
-                    <br />
-                    Nairobi, Kenya
-                    <br />
-                    P.O. Box 12345-00100
-                  </p>
-                  <Button
-                    variant="outline"
-                    className="border-green-600 text-green-600 hover:bg-green-50"
-                  >
-                    Get Directions
-                  </Button>
-                </CardContent>
-              </Card>
+              {/*<Card className="bg-white dark:bg-gray-800">*/}
+              {/*  <CardHeader>*/}
+              {/*    <CardTitle className="flex items-center gap-2 text-green-800 dark:text-green-400">*/}
+              {/*      <MapPin className="h-6 w-6" />*/}
+              {/*      Visit Our Office*/}
+              {/*    </CardTitle>*/}
+              {/*  </CardHeader>*/}
+              {/*  <CardContent>*/}
+              {/*    <p className="text-gray-600 dark:text-gray-300 mb-4">*/}
+              {/*      Kenya Trek Adventures*/}
+              {/*      <br />*/}
+              {/*      Westlands Business Center*/}
+              {/*      <br />*/}
+              {/*      Nairobi, Kenya*/}
+              {/*      <br />*/}
+              {/*      P.O. Box 12345-00100*/}
+              {/*    </p>*/}
+              {/*    <Button*/}
+              {/*      variant="outline"*/}
+              {/*      className="border-green-600 text-green-600 hover:bg-green-50"*/}
+              {/*    >*/}
+              {/*      Get Directions*/}
+              {/*    </Button>*/}
+              {/*  </CardContent>*/}
+              {/*</Card>*/}
 
               <Card className="bg-white dark:bg-gray-800">
                 <CardHeader>

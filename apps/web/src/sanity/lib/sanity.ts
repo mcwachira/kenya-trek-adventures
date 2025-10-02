@@ -1,12 +1,11 @@
 import { createClient } from "@sanity/client";
 import imageUrlBuilder from "@sanity/image-url";
-import { apiVersion, dataset, projectId, useCdn } from "../env";
+import { apiVersion, dataset, projectId } from "../env";
 export const client = createClient({
   apiVersion,
   dataset,
   projectId,
   token: process.env.SANITY_API_TOKEN,
-  useCdn,
 });
 const builder = imageUrlBuilder(client);
 export const urlFor = (source: any) => builder.image(source);

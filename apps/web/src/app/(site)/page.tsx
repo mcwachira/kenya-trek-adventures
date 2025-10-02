@@ -1,5 +1,4 @@
 "use client";
-import BookingCalendar from "@/components/BookingCalendaer";
 import FeaturedExpeditions from "@/components/FeaturedExpeditions";
 import GuideProfile from "@/components/GuideProfile";
 import Hero from "@/components/Hero";
@@ -17,7 +16,7 @@ export default function Home() {
       <ServiceCards />
       <FeaturedExpeditions />
       {showBooking && <BookingForm onClose={() => setShowBooking(false)} />}
-      {/*<Testimonials />*/}
+      <Testimonials />
 
       <GuideProfile />
       <SafetySection />

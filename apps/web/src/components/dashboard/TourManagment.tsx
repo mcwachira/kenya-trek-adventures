@@ -37,6 +37,7 @@ import {
   Eye,
 } from "lucide-react";
 import { Tour, useToursData } from "@/hooks/useToursData";
+import Image from "next/image";
 
 const TourManagement = () => {
   const {
@@ -522,11 +523,15 @@ const TourManagement = () => {
                         <div className="flex items-center gap-3">
                           <div className="w-12 h-12 bg-gradient-to-br from-green-400 to-green-600 rounded-lg overflow-hidden">
                             {tour.image ? (
-                              <img
-                                src={tour.image}
-                                alt={tour.title}
-                                className="w-full h-full object-cover"
-                              />
+
+
+                                <Image
+                                    src={tour.image}
+                                    alt={tour.title}
+                                    width={800}
+                                    height={400}
+                                    className="w-full h-full object-cover"
+                                />
                             ) : (
                               <div className="w-full h-full flex items-center justify-center">
                                 <Mountain className="h-6 w-6 text-white" />

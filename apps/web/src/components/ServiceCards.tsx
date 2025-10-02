@@ -8,10 +8,8 @@ import {
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import MountKenya from "@/assets/lenana-point.jpg"
-import Aberdare from "@/assets/Aberdare-Forest.jpg"
 import Amboseli from "@/assets/amboseli-national-park.jpg"
 import MassaiMara from "@/assets/massai-mara.jpg"
-import HellsGate from "@/assets/hells-gate.jpg"
 import Link from "next/link";
 
 const ServiceCards = () => {
