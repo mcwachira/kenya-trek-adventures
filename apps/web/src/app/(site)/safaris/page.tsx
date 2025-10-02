@@ -1,3 +1,4 @@
+"use client"
 import Header from "@/components/Header";
 import { Button } from "@/components/ui/button";
 import {
@@ -7,16 +8,27 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
-import { Binoculars, MapPin, Calendar, Star } from "lucide-react";
+import { Binoculars, MapPin, Calendar} from "lucide-react";
+import BookingForm from "@/components/BookingForm";
 import Image from "next/image";
 
-import Aberdare from "@/assets/Aberdare-Forest.jpg";
+
 import Amboseli from "@/assets/amboseli-national-park.jpg";
 import MassaiMara from "@/assets/Massai-mara-national-Park.jpg";
 import LakeNakuru from "@/assets/lake-nakuru-national-park.jpg";
 import Tsavo from "@/assets/Tsavo-National-park.jpg";
+import {useState} from "react";
 
 const Safaris = () => {
+    const [showBooking, setShowBooking] = useState(false);
+    const [selectedSafari, setSelectedSafari] = useState("");
+    // const { tours: safaris, isLoading, error } = useToursByCategory('safari');
+
+    const handleBookSafari = (safariName: string) => {
+        setSelectedSafari(safariName);
+        setShowBooking(true);
+    };
+
     const safaris = [
         {
             name: "Maasai Mara Safari",
@@ -53,6 +65,7 @@ const Safaris = () => {
     ];
 
     return (
+        <>
         <div className="min-h-screen bg-gradient-to-b from-green-50 to-orange-50 dark:from-gray-900 dark:to-gray-800">
             <Header />
 
@@ -82,6 +95,7 @@ const Safaris = () => {
                     <Button
                         size="lg"
                         className="bg-orange-600 hover:bg-orange-700 text-white px-8 py-4 text-lg"
+                        onClick={() => setShowBooking(true)}
                     >
                         Plan Your Safari
                     </Button>
@@ -149,7 +163,8 @@ const Safaris = () => {
                                             ))}
                                         </div>
                                     </div>
-                                    <Button className="w-full bg-green-700 hover:bg-green-800 text-white">
+                                    <Button className="w-full bg-green-700 hover:bg-green-800 text-white"
+                                            onClick={() => handleBookSafari(safari.name)}>
                                         Book Safari
                                     </Button>
                                 </div>
@@ -159,6 +174,14 @@ const Safaris = () => {
                 </div>
             </section>
         </div>
+    {showBooking && (
+        <BookingForm
+            onClose={() => setShowBooking(false)}
+            serviceName={selectedSafari || "Kenya Safari"}
+        />
+    )}
+
+        </>
     );
 };
 
