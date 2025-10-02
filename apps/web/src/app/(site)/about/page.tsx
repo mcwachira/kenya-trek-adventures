@@ -10,8 +10,14 @@ import {
   Star,
   Clock,
 } from "lucide-react";
+import NairobiNationalPark from "@/assets/Nairobi-park.jpg"
+import Image from "next/image";
 
 const About = () => {
+
+
+
+
   const stats = [
     { icon: Users, label: "Happy Clients", value: "2,500+" },
     { icon: Mountain, label: "Tours Completed", value: "1,200+" },
@@ -121,11 +127,20 @@ const About = () => {
             </div>
           </div>
           <div className="relative">
-            <img
-              src="https://images.unsplash.com/photo-1469041797191-50ace28483c3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-              alt="Kenya landscape"
-              className="rounded-lg shadow-xl"
-            />
+            {/*<img*/}
+            {/*  src="https://images.unsplash.com/photo-1469041797191-50ace28483c3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"*/}
+            {/*  alt="Kenya landscape"*/}
+            {/*  className="rounded-lg shadow-xl"*/}
+            {/*/>*/}
+
+              <Image
+                  src={NairobiNationalPark}
+                  alt="Nairobi National Park"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  priority // make the first image preload
+              />
             <div className="absolute -bottom-6 -right-6 bg-green-600 text-white p-6 rounded-lg shadow-lg">
               <div className="flex items-center gap-2">
                 <Clock className="h-6 w-6" />
