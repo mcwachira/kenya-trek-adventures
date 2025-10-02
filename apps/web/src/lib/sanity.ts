@@ -18,7 +18,7 @@ export interface Tour {
     duration: string; // ✅ good if you want "5 Days"
 
     category?: "mount-kenya" | "safari" | "day-trip"; // ✅ string union is safer
-    location?: string;
+    location: string;
     maxParticipants?: number;
     status?: "active" | "inactive";
 
