@@ -1,7 +1,8 @@
 "use client";
 import { useState, useEffect } from "react";
-import { BlogPost, Category, Tour } from "@/types/index";
+import { BlogPost, Category } from "@/types/index";
 import { client, queries } from "@/sanity/lib/sanity";
+import {Tour} from "@/hooks/useToursData";
 
 // Hook for fetching tours
 
