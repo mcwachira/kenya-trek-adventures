@@ -7,8 +7,10 @@ import { useTours } from "@/hooks/useSanity";
 import { urlFor } from "@/sanity/lib/image";
 import Image, { StaticImageData } from "next/image";
 import Aberdare from "@/assets/Aberdare-Forest.jpg";
+import LenanaPoint from "@/assets/lenana-point.jpg"
 import Amboseli from "@/assets/amboseli-national-park.jpg";
 import HellsGate from "@/assets/hells-gate.jpg";
+import MassaiMara from "@/assets/massai-mara.jpg"
 
 export type Expedition = {
     _id: string;
@@ -51,7 +53,7 @@ const FeaturedExpeditions = () => {
             duration: 4,
             difficulty: "Moderate",
             price: 450,
-            image: "@/assets/lenana-point.jpg",
+            image: LenanaPoint,
             highlights: [
                 "Spectacular alpine scenery",
                 "Acclimatization friendly",
@@ -66,7 +68,7 @@ const FeaturedExpeditions = () => {
             duration: 3,
             difficulty: "Easy",
             price: 320,
-            image: "@assets/massai-mara.jpg",
+            image: MassaiMara,
             highlights: [
                 "Great Migration witness",
                 "Big Five guarantee",
@@ -81,7 +83,7 @@ const FeaturedExpeditions = () => {
             duration: 5,
             difficulty: "Challenging",
             price: 580,
-            image: "@/assets/lenana-point.jpg",
+            image: LenanaPoint,
             highlights: ["Most scenic route", "Lake Michaelson", "Gorges Valley"],
             elevation: "4,985m",
         },
