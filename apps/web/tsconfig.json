@@ -1,6 +1,8 @@
 {
   "extends": "@repo/typescript-config/nextjs.json",
   "compilerOptions": {
+    "target": "es2017",
+    "lib": ["dom", "es2017"],
     "plugins": [{ "name": "next" }],
     "paths": {
       "@/*": ["./src/*"]
