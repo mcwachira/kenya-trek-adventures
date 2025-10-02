@@ -1,9 +1,7 @@
-import {StaticImageData} from "next/image";
-import Aberdare from "@/assets/Aberdare-Forest.jpg";
-import Amboseli from "@/assets/amboseli-national-park.jpg";
+import LenanaPoint from "@/assets/lenana-point.jpg";
 import HellsGate from "@/assets/hells-gate.jpg";
+import MassaiMara from "@/assets/massai-mara.jpg";
 import {Tour} from "@/lib/sanity";
-import {Skeleton} from "@/components/ui/skeleton";
 
 export const defaultExpeditions: Tour[] = [
     {
@@ -87,6 +85,7 @@ export const defaultExpeditions: Tour[] = [
         price: 580,
         image: LenanaPoint,
         highlights: ["Most scenic route", "Lake Michaelson", "Gorges Valley"],
+        location: "Mount Kenya National Park",
         elevation: "4,985m",
         slug: { current: "chogoria" },
         description: "The most scenic climb up Mount Kenya.",

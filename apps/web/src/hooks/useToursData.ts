@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {Tour} from "@/lib/sanity";
 import {defaultExpeditions} from "@/lib/data/data";
+import { v4 as uuidv4 } from "uuid";
 
 // export interface Tour {
 //   id: number;
@@ -126,7 +127,7 @@ export const useToursData = () => {
       const tours = getInitialTours();
       const tour: Tour = {
         ...newTour,
-        id: Date.now(),
+          _id: uuidv4(),
         createdAt: new Date().toISOString(),
       };
       const updatedTours = [...tours, tour];
@@ -142,7 +143,7 @@ export const useToursData = () => {
     mutationFn: (updatedTour: Tour) => {
       const tours = getInitialTours();
       const updatedTours = tours.map((tour) =>
-        tour.id === updatedTour.id ? updatedTour : tour,
+        tour._id === updatedTour._id ? updatedTour : tour,
       );
       localStorage.setItem(TOURS_STORAGE_KEY, JSON.stringify(updatedTours));
       return Promise.resolve(updatedTour);
@@ -153,9 +154,9 @@ export const useToursData = () => {
   });
 
   const deleteTourMutation = useMutation({
-    mutationFn: (tourId: number) => {
+    mutationFn: (tourId: string) => {
       const tours = getInitialTours();
-      const updatedTours = tours.filter((tour) => tour.id !== tourId);
+      const updatedTours = tours.filter((tour) => tour._id !== tourId);
       localStorage.setItem(TOURS_STORAGE_KEY, JSON.stringify(updatedTours));
       return Promise.resolve(tourId);
     },
