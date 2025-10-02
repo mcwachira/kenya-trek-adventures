@@ -9,16 +9,20 @@ import Image, { StaticImageData } from "next/image";
 import Aberdare from "@/assets/Aberdare-Forest.jpg";
 import Amboseli from "@/assets/amboseli-national-park.jpg";
 import HellsGate from "@/assets/hells-gate.jpg";
-import {Tour} from "@/hooks/useToursData";
 
-type Expedition = {
+export type Expedition = {
     _id: string;
     title: string;
     route: string;
     duration: number;
-    difficulty: "Easy" | "Moderate" | "Challenging" | string;
+    difficulty: "Easy" | "Moderate" | "Challenging";
     price: number;
-    image: any; // could be Sanity image type
+    image: {
+        asset: {
+            _ref: string; // Sanity image reference
+            _type: "reference";
+        };
+    } | StaticImageData; // allow fallback to static images
     highlights: string[];
     elevation: string;
 };
@@ -86,7 +90,7 @@ const FeaturedExpeditions = () => {
     const defaultImages: StaticImageData[] = [Aberdare, Amboseli, HellsGate];
 
     const expeditions: Expedition[] =
-        tours && tours.length > 0 ? (tours as Tour[]).slice(0, 3) : defaultExpeditions;
+        tours && tours.length > 0 ? (tours as Expedition[]).slice(0, 3) : defaultExpeditions;
 
     if (loading) {
         return (
