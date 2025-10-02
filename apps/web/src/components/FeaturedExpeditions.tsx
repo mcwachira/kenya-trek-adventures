@@ -6,6 +6,10 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useTours } from "@/hooks/useSanity";
 import { urlFor } from "@/sanity/lib/image";
 import Image from "next/image";
+import Aberdare from "@/assets/Aberdare-Forest.jpg"
+import Amboseli from "@/assets/amboseli-national-park.jpg"
+import MassaiMara from "@/assets/massai-mara.jpg"
+import HellsGate from "@/assets/hells-gate.jpg"
 
 const FeaturedExpeditions = () => {
   const { tours, loading, error } = useTours();
@@ -31,7 +35,7 @@ const FeaturedExpeditions = () => {
       duration: 4,
       difficulty: "Moderate" as const,
       price: 450,
-      image: null,
+      image: '@/assets/lenana-point.jpg',
       highlights: [
         "Spectacular alpine scenery",
         "Acclimatization friendly",
@@ -46,7 +50,7 @@ const FeaturedExpeditions = () => {
       duration: 3,
       difficulty: "Easy" as const,
       price: 320,
-      image: null,
+      image: "@assets/massai-mara.jpg",
       highlights: [
         "Great Migration witness",
         "Big Five guarantee",
@@ -61,20 +65,23 @@ const FeaturedExpeditions = () => {
       duration: 5,
       difficulty: "Challenging" as const,
       price: 580,
-      image: null,
+      image:'@/assets/lenana-point.jpg' ,
       highlights: ["Most scenic route", "Lake Michaelson", "Gorges Valley"],
       elevation: "4,985m",
     },
   ];
 
   const defaultImages = [
-    "https://images.unsplash.com/photo-1465379944081-7f47de8d74ac?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-    "https://images.unsplash.com/photo-1518877593221-1f28583780b4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-    "https://images.unsplash.com/photo-1452378174528-3090a4bba7b2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      Aberdare,
+      Amboseli,
+    HellsGate,
   ];
 
   const expeditions =
     tours && tours.length > 0 ? tours.slice(0, 3) : defaultExpeditions;
+
+  console.log("expedition", expeditions);
+    // console.log("Image object:", expedition.image);
 
   if (loading) {
     return (
@@ -147,11 +154,13 @@ const FeaturedExpeditions = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {expeditions.map((expedition, index) => {
-            const imageUrl = expedition.image
-              ? urlFor(expedition.image).width(800).height(400).url()
-              : defaultImages[index];
+              const imageUrl =
+                  expedition.image && expedition.image.asset?._ref
+                      ? urlFor(expedition.image).width(800).height(400).url()
+                      : defaultImages[index];
 
-            return (
+
+              return (
               <div
                 key={expedition._id}
                 className="bg-white dark:bg-gray-900 rounded-xl shadow-xl overflow-hidden hover:shadow-2xl transition-shadow duration-300"
