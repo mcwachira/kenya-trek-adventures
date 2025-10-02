@@ -5,195 +5,216 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
 } from "@/components/ui/select";
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Label } from "@/components/ui/label";
 import {
-  Plus,
-  Edit,
-  Trash2,
-  Mountain,
-  Calendar,
-  Users,
-  DollarSign,
-  MapPin,
-  Grid,
-  List,
-  Search,
-  Filter,
-  Eye,
+    Plus,
+    Edit,
+    Trash2,
+    Mountain,
+    Calendar,
+    Users,
+    DollarSign,
+    MapPin,
+    Grid,
+    List,
+    Search,
+    Filter,
+    Eye,
 } from "lucide-react";
 import { useToursData } from "@/hooks/useToursData";
 import Image from "next/image";
 import { Tour } from "@/lib/sanity";
 
 const TourManagement = () => {
-  const {
-    tours,
-    addTour,
-    updateTour,
-    deleteTour,
-    isAddingTour,
-    isUpdatingTour,
-    isDeletingTour,
-  } = useToursData();
+    const {
+        tours,
+        addTour,
+        updateTour,
+        deleteTour,
+        isAddingTour,
+        isUpdatingTour,
+        isDeletingTour,
+    } = useToursData();
 
-  const [showEditor, setShowEditor] = useState(false);
-  const [editingTour, setEditingTour] = useState<Tour | null>(null);
-  const [viewMode, setViewMode] = useState<"table" | "grid">("table");
-  const [searchTerm, setSearchTerm] = useState("");
-  const [categoryFilter, setCategoryFilter] = useState("all");
-  const [statusFilter, setStatusFilter] = useState("all");
+    const [showEditor, setShowEditor] = useState(false);
+    const [editingTour, setEditingTour] = useState<Tour | null>(null);
+    const [viewMode, setViewMode] = useState<"table" | "grid">("table");
+    const [searchTerm, setSearchTerm] = useState("");
+    const [categoryFilter, setCategoryFilter] = useState("all");
+    const [statusFilter, setStatusFilter] = useState("all");
 
-  const [formData, setFormData] = useState({
-    title: "",
-    description: "",
-    duration: "",
-    price: "",
-    difficulty: "Easy" as Tour["difficulty"],
-    image: "",
-    category: "mount-kenya" as Tour["category"],
-    highlights: "",
-    included: "",
-    location: "",
-    maxParticipants: 8,
-    status: "active" as Tour["status"],
-  });
+    const [formData, setFormData] = useState({
+        title: "",
+        description: "",
+        duration: "",
+        price: 0,
+        difficulty: "Easy" as Tour["difficulty"],
+        image: "",
+        category: "mount-kenya" as Tour["category"],
+        highlights: "",
+        included: "",
+        location: "",
+        maxParticipants: 8,
+        status: "active" as Tour["status"],
+    });
 
-  const filteredTours = tours.filter((tour) => {
-    const matchesSearch =
-      tour.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      tour.location.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory =
-      categoryFilter === "all" || tour.category === categoryFilter;
-    const matchesStatus =
-      statusFilter === "all" || tour.status === statusFilter;
-    return matchesSearch && matchesCategory && matchesStatus;
-  });
+    const filteredTours = tours.filter((tour) => {
+        const matchesSearch =
+            tour.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            tour.location.toLowerCase().includes(searchTerm.toLowerCase());
+        const matchesCategory =
+            categoryFilter === "all" || tour.category === categoryFilter;
+        const matchesStatus =
+            statusFilter === "all" || tour.status === statusFilter;
+        return matchesSearch && matchesCategory && matchesStatus;
+    });
 
-  const handleCreateTour = () => {
-    const tourData = {
-      ...formData,
-      highlights: formData.highlights
-        .split(",")
-        .map((h) => h.trim())
-        .filter((h) => h.length > 0),
-      included: formData.included
-        .split(",")
-        .map((i) => i.trim())
-        .filter((i) => i.length > 0),
+    const handleCreateTour = () => {
+        const tourData: Tour = {
+            _id: crypto.randomUUID(), // Generate unique ID
+            title: formData.title,
+            description: formData.description,
+            duration: formData.duration,
+            price: formData.price,
+            difficulty: formData.difficulty,
+            image: formData.image,
+            category: formData.category,
+            highlights: formData.highlights
+                .split(",")
+                .map((h) => h.trim())
+                .filter(Boolean),
+            included: formData.included
+                .split(",")
+                .map((i) => i.trim())
+                .filter(Boolean),
+            location: formData.location,
+            maxParticipants: formData.maxParticipants,
+            status: formData.status,
+        };
+
+        addTour(tourData);
+        setShowEditor(false);
+        resetForm();
     };
 
-    addTour(tourData);
-    setShowEditor(false);
-    resetForm();
-  };
-
-  const handleEditTour = (tour: Tour) => {
-    setEditingTour(tour);
-    setFormData({
-      title: tour.title,
-      description: tour.description,
-      duration: tour.duration,
-      price: tour.price,
-      difficulty: tour.difficulty,
-      image: tour.image,
-      category: tour.category,
-      highlights: tour.highlights.join(", "),
-      included: tour.included.join(", "),
-      location: tour.location,
-      maxParticipants: tour.maxParticipants,
-      status: tour.status,
-    });
-    setShowEditor(true);
-  };
-
-  const handleUpdateTour = () => {
-    if (!editingTour) return;
-
-    const updatedTour: Tour = {
-      ...editingTour,
-      ...formData,
-      highlights: formData.highlights
-        .split(",")
-        .map((h) => h.trim())
-        .filter((h) => h.length > 0),
-      included: formData.included
-        .split(",")
-        .map((i) => i.trim())
-        .filter((i) => i.length > 0),
+    const handleEditTour = (tour: Tour) => {
+        setEditingTour(tour);
+        setFormData({
+            title: tour.title,
+            description: tour.description,
+            duration: tour.duration,
+            price: tour.price,
+            difficulty: tour.difficulty,
+            image: tour.image as string, // handle image type
+            category: tour.category || "mount-kenya",
+            highlights: tour.highlights.join(", "),
+            included: tour.included.join(", "),
+            location: tour.location,
+            maxParticipants: tour.maxParticipants || 8,
+            status: tour.status || "active",
+        });
+        setShowEditor(true);
     };
 
-    updateTour(updatedTour);
-    setShowEditor(false);
-    setEditingTour(null);
-    resetForm();
-  };
+    const handleUpdateTour = () => {
+        if (!editingTour) return;
 
-  const handleDeleteTour = (id: number) => {
-    if (confirm("Are you sure you want to delete this tour?")) {
-      deleteTour(id);
-    }
-  };
+        const updatedTour: Tour = {
+            ...editingTour,
+            title: formData.title,
+            description: formData.description,
+            duration: formData.duration,
+            price: formData.price,
+            difficulty: formData.difficulty,
+            image: formData.image,
+            category: formData.category,
+            highlights: formData.highlights
+                .split(",")
+                .map((h) => h.trim())
+                .filter(Boolean),
+            included: formData.included
+                .split(",")
+                .map((i) => i.trim())
+                .filter(Boolean),
+            location: formData.location,
+            maxParticipants: formData.maxParticipants,
+            status: formData.status,
+        };
 
-  const resetForm = () => {
-    setFormData({
-      title: "",
-      description: "",
-      duration: "",
-      price: "",
-      difficulty: "Easy",
-      image: "",
-      category: "mount-kenya",
-      highlights: "",
-      included: "",
-      location: "",
-      maxParticipants: 8,
-      status: "active",
-    });
-  };
+        updateTour(updatedTour);
+        setShowEditor(false);
+        setEditingTour(null);
+        resetForm();
+    };
 
-  const getDifficultyColor = (difficulty: string) => {
-    switch (difficulty) {
-      case "Easy":
-        return "bg-green-500 text-white hover:bg-green-600";
-      case "Moderate":
-        return "bg-yellow-500 text-white hover:bg-yellow-600";
-      case "Challenging":
-        return "bg-red-500 text-white hover:bg-red-600";
-      default:
-        return "bg-gray-500 text-white hover:bg-gray-600";
-    }
-  };
+    const handleDeleteTour = (_id: string) => {
+        if (confirm("Are you sure you want to delete this tour?")) {
+            deleteTour(_id);
+        }
+    };
 
-  const getCategoryColor = (category: string) => {
-    switch (category) {
-      case "mount-kenya":
-        return "bg-blue-500 text-white hover:bg-blue-600";
-      case "safari":
-        return "bg-orange-500 text-white hover:bg-orange-600";
-      case "day-trip":
-        return "bg-purple-500 text-white hover:bg-purple-600";
-      default:
-        return "bg-gray-500 text-white hover:bg-gray-600";
-    }
-  };
+    const resetForm = () => {
+        setFormData({
+            title: "",
+            description: "",
+            duration: "",
+            price: 0,
+            difficulty: "Easy",
+            image: "",
+            category: "mount-kenya",
+            highlights: "",
+            included: "",
+            location: "",
+            maxParticipants: 8,
+            status: "active",
+        });
+    };
 
-  return (
-    <div className="space-y-6">
+    const getDifficultyColor = (difficulty: string) => {
+        switch (difficulty) {
+            case "Easy":
+                return "bg-green-500 text-white hover:bg-green-600";
+            case "Moderate":
+                return "bg-yellow-500 text-white hover:bg-yellow-600";
+            case "Challenging":
+                return "bg-red-500 text-white hover:bg-red-600";
+            default:
+                return "bg-gray-500 text-white hover:bg-gray-600";
+        }
+    };
+
+    const getCategoryColor = (category: string) => {
+        switch (category) {
+            case "mount-kenya":
+                return "bg-blue-500 text-white hover:bg-blue-600";
+            case "safari":
+                return "bg-orange-500 text-white hover:bg-orange-600";
+            case "day-trip":
+                return "bg-purple-500 text-white hover:bg-purple-600";
+            default:
+                return "bg-gray-500 text-white hover:bg-gray-600";
+        }
+    };
+
+    return (
+
+
+<div className="space-y-6">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <h2 className="text-3xl font-bold text-green-800 dark:text-green-400">
@@ -517,7 +538,7 @@ img
                 <TableBody>
                   {filteredTours.map((tour) => (
                     <TableRow
-                      key={tour.id}
+                      key={tour._id}
                       className="hover:bg-gray-50 dark:hover:bg-gray-800/50"
                     >
                       <TableCell>
