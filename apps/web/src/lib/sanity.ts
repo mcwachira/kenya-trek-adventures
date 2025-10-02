@@ -1,5 +1,5 @@
 import { BlockContent } from "./portableText";
-
+import { StaticImageData } from "next/image";
 export interface ItineraryDay {
   day: number;
   title: string;
@@ -17,11 +17,11 @@ export interface Tour {
   duration: number;
   difficulty: "Easy" | "Moderate" | "Challenging";
   price: number;
-  image: {
-    _type: "image";
-    asset: { _ref: string; _type: "reference" };
-  };
-  highlights: string[];
+    image: {
+        _type: "image";
+        asset: { _ref: string; _type: "reference" };
+    } | StaticImageData;
+    highlights: string[];
   elevation: string;
   route: string;
   included: string[];

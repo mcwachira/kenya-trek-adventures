@@ -12,8 +12,8 @@ import LenanaPoint from "@/assets/lenana-point.jpg";
 import Amboseli from "@/assets/amboseli-national-park.jpg";
 import HellsGate from "@/assets/hells-gate.jpg";
 import MassaiMara from "@/assets/massai-mara.jpg";
+import {Tour} from "@/lib/sanity";
 
-import { Expedition } from "@/types/expedition";
 
 const FeaturedExpeditions = () => {
     const { tours, loading, error } = useTours();
@@ -31,7 +31,7 @@ const FeaturedExpeditions = () => {
         }
     };
 
-    const defaultExpeditions: Expedition[] = [
+    const defaultExpeditions: Tour[] = [
         {
             _id: "default-1",
             title: "Mount Kenya Point Lenana",
