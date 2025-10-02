@@ -7,6 +7,12 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import MountKenya from "@/assets/lenana-point.jpg"
+import Aberdare from "@/assets/Aberdare-Forest.jpg"
+import Amboseli from "@/assets/amboseli-national-park.jpg"
+import MassaiMara from "@/assets/massai-mara.jpg"
+import HellsGate from "@/assets/hells-gate.jpg"
+import Link from "next/link";
 
 const ServiceCards = () => {
   const services = [
@@ -15,7 +21,7 @@ const ServiceCards = () => {
       description:
         "Conquer Africa's second-highest peak with expert guidance through Sirimon, Chogoria, and Naro Moru routes.",
       image:
-        "https://images.unsplash.com/photo-1493962853295-0fd70327578a?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+        MountKenya,
       duration: "3-7 Days",
       difficulty: "Moderate to Challenging",
       price: "From $450",
@@ -25,13 +31,14 @@ const ServiceCards = () => {
         "Camping equipment",
         "Route flexibility",
       ],
+        link: "/mount-kenya"
     },
     {
       title: "Safari Adventures",
       description:
         "Witness the Big Five and experience Kenya's incredible wildlife in world-renowned national parks.",
       image:
-        "https://images.unsplash.com/photo-1466721591366-2d5fba72006d?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+        Amboseli,
       duration: "2-10 Days",
       difficulty: "Easy to Moderate",
       price: "From $320",
@@ -41,13 +48,14 @@ const ServiceCards = () => {
         "Park fees included",
         "Customizable itineraries",
       ],
+        link: "/safaris"
     },
     {
       title: "Custom Adventures",
       description:
         "Tailored experiences combining climbing, wildlife, and cultural encounters based on your preferences.",
       image:
-        "https://images.unsplash.com/photo-1439886183900-e79ec0057170?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+        MassaiMara,
       duration: "1-14 Days",
       difficulty: "All Levels",
       price: "Custom Pricing",
@@ -57,6 +65,7 @@ const ServiceCards = () => {
         "Private or group options",
         "Cultural experiences",
       ],
+        link: "/day-trips"
     },
   ];
 
@@ -134,9 +143,12 @@ const ServiceCards = () => {
                   ))}
                 </ul>
 
-                <Button className="w-full bg-green-700 hover:bg-green-800 text-white">
-                  Learn More
-                </Button>
+                  <Link href={service.link}>
+                      <Button className="w-full bg-green-700 hover:bg-green-800 text-white">
+                          Learn More
+                      </Button>
+                  </Link>
+
               </CardContent>
             </Card>
           ))}
