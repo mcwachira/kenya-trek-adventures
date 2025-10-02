@@ -1,5 +1,6 @@
+"use client"
+import { useState } from "react";
 import Header from "@/components/Header";
-
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -17,8 +18,17 @@ import HellsGate from "@/assets/hells-gate.jpg"
 import OlPajeta from "@/assets/Ol-Pejeta-Conservancy.jpg"
 import LakeNaivasha from "@/assets/lake-naivasha.jpg"
 import Image from "next/image";
+import BookingForm from "@/components/BookingForm";
 
 const DayTrips = () => {
+    const [showBooking, setShowBooking] = useState(false);
+    const [selectedTrip, setSelectedTrip] = useState("");
+    // const { tours: dayTrips, isLoading, error } = useToursByCategory('day-trip');
+
+    const handleBookTrip = (tripName: string) => {
+        setSelectedTrip(tripName);
+        setShowBooking(true);
+    };
   const dayTrips = [
     {
       name: "Hell's Gate National Park",
@@ -146,7 +156,8 @@ const DayTrips = () => {
             </p>
             <Button
               size="lg"
-              className="bg-orange-600 hover:bg-orange-700 text-white px-8 py-4 text-lg"
+              className=" cursor-pointer bg-orange-600 hover:bg-orange-700 text-white px-8 py-4 text-lg"
+              onClick={() => setShowBooking(true)}
             >
               Book Day Trip
             </Button>
@@ -217,7 +228,9 @@ const DayTrips = () => {
                         ))}
                       </div>
                     </div>
-                    <Button className="w-full bg-green-700 hover:bg-green-800 text-white">
+                    <Button className="cursor-pointer w-full bg-green-700 hover:bg-green-800 text-white"
+                            onClick={() => handleBookTrip(trip.name)}
+                    >
                       Book Now
                     </Button>
                   </div>
@@ -286,8 +299,15 @@ const DayTrips = () => {
           </div>
         </section>
       </div>
+        {showBooking && (
+            <BookingForm
+                onClose={() => setShowBooking(false)}
+                serviceName={selectedTrip || "Kenya Day Trip"}
+            />
+        )}
     </>
   );
 };
 
 export default DayTrips;
+
