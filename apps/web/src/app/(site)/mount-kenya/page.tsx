@@ -1,5 +1,5 @@
+"use client"
 import Header from "@/components/Header";
-
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -9,8 +9,16 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Mountain, Clock, CheckCircle } from "lucide-react";
+import {useState} from "react";
+import {useToursByCategory} from "@/hooks/useToursData";
+import BookingForm from "@/components/BookingForm";
 
 const MountKenya = () => {
+
+    const [showBooking, setShowBooking] = useState(false);
+    const [selectedRoute, setSelectedRoute] = useState("");
+    // const { tours: routes, isLoading, error } = useToursByCategory('mount-kenya');
+
   const routes = [
     {
       name: "Sirimon-Chogoria Route",
@@ -75,12 +83,13 @@ const MountKenya = () => {
               Challenge yourself on Africa&apos;s second highest peak. Multiple
               routes to Point Lenana (4,985m) with expert guides.
             </p>
-            <Button
-              size="lg"
-              className="bg-orange-600 hover:bg-orange-700 text-white px-8 py-4 text-lg"
-            >
-              Book Your Expedition
-            </Button>
+              <Button
+                  size="lg"
+                  className="bg-orange-600 hover:bg-orange-700 text-white px-8 py-4 text-lg"
+                  onClick={() => setShowBooking(true)}
+              >
+                  Book Your Expedition
+              </Button>
           </div>
         </section>
 
@@ -127,8 +136,9 @@ const MountKenya = () => {
                         / person
                       </span>
                     </div>
-                    <Button className="w-full bg-green-700 hover:bg-green-800 text-white">
-                      Learn More
+                    <Button className="w-full bg-green-700 hover:bg-green-800 text-white"
+                            onClick={() => setShowBooking(true)}>
+                      Book This Route
                     </Button>
                   </div>
                 </CardContent>
@@ -158,6 +168,13 @@ const MountKenya = () => {
           </div>
         </section>
       </div>
+
+        {showBooking && (
+            <BookingForm
+                onClose={() => setShowBooking(false)}
+                serviceName={selectedRoute || "Mount Kenya Expedition"}
+            />
+        )}
     </>
   );
 };
