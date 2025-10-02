@@ -111,9 +111,13 @@ const Footer = () => {
               <p className="text-sm text-green-100 mb-2">
                 Quick inquiries and instant support
               </p>
+                <Link href="https://wa.me/0721876253" target="_blank">
+
+
               <button className="bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-colors duration-200">
                 Chat on WhatsApp
               </button>
+                </Link>
             </div>
           </div>
         </div>

@@ -35,6 +35,7 @@ export default function RootLayout({
         <AppProviders>
           <Header />
           {children}
+
           <Footer />
         </AppProviders>
       </body>
