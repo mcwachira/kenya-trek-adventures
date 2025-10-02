@@ -13,6 +13,7 @@ import Amboseli from "@/assets/amboseli-national-park.jpg";
 import HellsGate from "@/assets/hells-gate.jpg";
 import MassaiMara from "@/assets/massai-mara.jpg";
 import { Tour } from "@/lib/sanity";
+import {defaultExpeditions} from "@/lib/data/data";
 
 const FeaturedExpeditions = () => {
     const { tours, loading, error } = useTours();
@@ -42,64 +43,6 @@ const FeaturedExpeditions = () => {
         );
     };
 
-    const defaultExpeditions: Tour[] = [
-        {
-            _id: "default-1",
-            title: "Mount Kenya Point Lenana",
-            route: "Sirimon Route",
-            duration: 4,
-            difficulty: "Moderate",
-            price: 450,
-            image: LenanaPoint,
-            highlights: [
-                "Spectacular alpine scenery",
-                "Acclimatization friendly",
-                "Beautiful Mackinder's Valley",
-            ],
-            elevation: "4,985m",
-            slug: { current: "lenana" },
-            description: "A stunning climb to Lenana Peak.",
-            included: [],
-            excluded: [],
-            itinerary: [],
-        },
-        {
-            _id: "default-2",
-            title: "Maasai Mara Safari",
-            route: "Big Five Experience",
-            duration: 3,
-            difficulty: "Easy",
-            price: 320,
-            image: MassaiMara,
-            highlights: [
-                "Great Migration witness",
-                "Big Five guarantee",
-                "Maasai cultural visit",
-            ],
-            elevation: "1,500m",
-            slug: { current: "maasai-mara" },
-            description: "The ultimate safari experience.",
-            included: [],
-            excluded: [],
-            itinerary: [],
-        },
-        {
-            _id: "default-3",
-            title: "Chogoria Route Adventure",
-            route: "Chogoria Route",
-            duration: 5,
-            difficulty: "Challenging",
-            price: 580,
-            image: LenanaPoint,
-            highlights: ["Most scenic route", "Lake Michaelson", "Gorges Valley"],
-            elevation: "4,985m",
-            slug: { current: "chogoria" },
-            description: "The most scenic climb up Mount Kenya.",
-            included: [],
-            excluded: [],
-            itinerary: [],
-        },
-    ];
 
     const defaultImages: StaticImageData[] = [Aberdare, Amboseli, HellsGate];
 

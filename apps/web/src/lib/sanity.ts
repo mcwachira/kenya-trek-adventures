@@ -9,25 +9,40 @@ export interface ItineraryDay {
   meals?: string[];
 }
 
+
 export interface Tour {
-  _id: string;
-  title: string;
-  slug: { current: string };
-  description: string;
-  duration: number;
-  difficulty: "Easy" | "Moderate" | "Challenging";
-  price: number;
-    image: {
+    _id: string;
+    title: string;
+    slug?: { current: string }; // ✅ make optional, since not all defaults have slugs
+    description: string;
+    duration: string; // ✅ good if you want "5 Days"
+
+    category?: "mount-kenya" | "safari" | "day-trip"; // ✅ string union is safer
+    location?: string;
+    maxParticipants?: number;
+    status?: "active" | "inactive";
+
+    difficulty: "Easy" | "Moderate" | "Challenging";
+    price: number;
+
+    image:
+        | {
         _type: "image";
         asset: { _ref: string; _type: "reference" };
-    } | StaticImageData;
+    }
+        | StaticImageData;
+
     highlights: string[];
-  elevation: string;
-  route: string;
-  included: string[];
-  excluded: string[];
-  itinerary: ItineraryDay[];
+    elevation?: string; // ✅ optional (some tours don’t have this)
+    route?: string; // ✅ optional (some tours don’t have this)
+
+    included: string[];
+    excluded?: string[];
+    itinerary?: ItineraryDay[];
+
+    createdAt?: string; // ✅ ISO string
 }
+
 
 // src/types/sanity.ts (or wherever you consolidate your types)
 
