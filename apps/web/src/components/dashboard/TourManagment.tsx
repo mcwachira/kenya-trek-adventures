@@ -36,8 +36,9 @@ import {
   Filter,
   Eye,
 } from "lucide-react";
-import { Tour, useToursData } from "@/hooks/useToursData";
+import { useToursData } from "@/hooks/useToursData";
 import Image from "next/image";
+import { Tour } from "@/lib/sanity";
 
 const TourManagement = () => {
   const {
