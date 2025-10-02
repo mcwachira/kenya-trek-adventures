@@ -6,27 +6,21 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useTours } from "@/hooks/useSanity";
 import { urlFor } from "@/sanity/lib/image";
 import Image, { StaticImageData } from "next/image";
+
+// ✅ imports for default expeditions
 import Aberdare from "@/assets/Aberdare-Forest.jpg";
-import LenanaPoint from "@/assets/lenana-point.jpg"
+import LenanaPoint from "@/assets/lenana-point.jpg";
 import Amboseli from "@/assets/amboseli-national-park.jpg";
 import HellsGate from "@/assets/hells-gate.jpg";
-import MassaiMara from "@/assets/massai-mara.jpg"
+import MassaiMara from "@/assets/massai-mara.jpg";
+import {Tour} from "@/lib/sanity";
 
-export type Expedition = {
-    _id: string;
-    title: string;
-    route: string;
-    duration: number;
-    difficulty: "Easy" | "Moderate" | "Challenging";
-    price: number;
-    image: {
-        asset: {
-            _ref: string; // Sanity image reference
-            _type: "reference";
-        };
-    } | StaticImageData; // allow fallback to static images
-    highlights: string[];
-    elevation: string;
+// ✅ import your Sanity Tour type
+
+
+// Extend Tour for static images
+export type Expedition = Tour & {
+    image: Tour["image"] | StaticImageData;
 };
 
 const FeaturedExpeditions = () => {
@@ -45,10 +39,13 @@ const FeaturedExpeditions = () => {
         }
     };
 
+    // ✅ default expeditions now use StaticImageData
     const defaultExpeditions: Expedition[] = [
         {
             _id: "default-1",
             title: "Mount Kenya Point Lenana",
+            slug: { current: "mount-kenya-lenana" },
+            description: "Spectacular alpine trek via Sirimon route.",
             route: "Sirimon Route",
             duration: 4,
             difficulty: "Moderate",
@@ -60,10 +57,15 @@ const FeaturedExpeditions = () => {
                 "Beautiful Mackinder's Valley",
             ],
             elevation: "4,985m",
+            included: [],
+            excluded: [],
+            itinerary: [],
         },
         {
             _id: "default-2",
             title: "Maasai Mara Safari",
+            slug: { current: "maasai-mara-safari" },
+            description: "Big Five adventure in Maasai Mara.",
             route: "Big Five Experience",
             duration: 3,
             difficulty: "Easy",
@@ -75,10 +77,15 @@ const FeaturedExpeditions = () => {
                 "Maasai cultural visit",
             ],
             elevation: "1,500m",
+            included: [],
+            excluded: [],
+            itinerary: [],
         },
         {
             _id: "default-3",
             title: "Chogoria Route Adventure",
+            slug: { current: "chogoria-route" },
+            description: "The most scenic route to Mount Kenya.",
             route: "Chogoria Route",
             duration: 5,
             difficulty: "Challenging",
@@ -86,13 +93,15 @@ const FeaturedExpeditions = () => {
             image: LenanaPoint,
             highlights: ["Most scenic route", "Lake Michaelson", "Gorges Valley"],
             elevation: "4,985m",
+            included: [],
+            excluded: [],
+            itinerary: [],
         },
     ];
 
-    const defaultImages: StaticImageData[] = [Aberdare, Amboseli, HellsGate];
-
+    // ✅ If tours exist, use them; else fallback
     const expeditions: Expedition[] =
-        tours && tours.length > 0 ? (tours as Expedition[]).slice(0, 3) : defaultExpeditions;
+        tours && tours.length > 0 ? tours.slice(0, 3) : defaultExpeditions;
 
     if (loading) {
         return (
@@ -158,17 +167,19 @@ const FeaturedExpeditions = () => {
                         Featured Expeditions
                     </h2>
                     <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-                        Carefully curated adventures that showcase the best of Kenya&apos;s
-                        natural wonders
+                        Carefully curated adventures that showcase the best of
+                        Kenya&apos;s natural wonders
                     </p>
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                     {expeditions.map((expedition, index) => {
                         const imageUrl =
-                            expedition.image && expedition.image.asset?._ref
+                            typeof expedition.image !== "string" &&
+                            "asset" in expedition.image &&
+                            expedition.image.asset?._ref
                                 ? urlFor(expedition.image).width(800).height(400).url()
-                                : defaultImages[index];
+                                : expedition.image; // already StaticImageData
 
                         return (
                             <div
@@ -186,7 +197,7 @@ const FeaturedExpeditions = () => {
                                     <div className="absolute top-4 left-4">
                                         <Badge
                                             className={`${getDifficultyColor(
-                                                expedition.difficulty,
+                                                expedition.difficulty
                                             )} font-semibold`}
                                         >
                                             {expedition.difficulty}
@@ -213,7 +224,7 @@ const FeaturedExpeditions = () => {
                                     </div>
 
                                     <div className="space-y-2 mb-6">
-                                        {expedition.highlights?.slice(0, 3).map((highlight: string, idx: number) => (
+                                        {expedition.highlights?.slice(0, 3).map((highlight, idx) => (
                                             <div
                                                 key={idx}
                                                 className="flex items-center text-sm text-gray-600 dark:text-gray-300"
