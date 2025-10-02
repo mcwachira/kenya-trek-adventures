@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
+import Guide from "@/assets/machua.jpg"
 
 const GuideProfile = () => {
   const certifications = [
@@ -28,7 +29,7 @@ const GuideProfile = () => {
             <div className="space-y-6">
               <div>
                 <h3 className="text-2xl font-semibold text-green-700  mb-3">
-                  David Kamau
+                  Nelson Machua
                 </h3>
                 <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
                   With over 15 years of experience guiding adventurers through
@@ -102,7 +103,7 @@ const GuideProfile = () => {
             {/* Image container with a fixed height so Next/Image can fill */}
             <div className="relative w-full h-96 rounded-xl shadow-2xl overflow-hidden">
               <Image
-                src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&amp;auto=format&amp;fit=crop&amp;w=600&amp;q=80"
+                src={Guide}
                 alt="Nelson Machua - Professional Safari Guide"
                 fill
                 sizes="(max-width: 768px) 100vw, 50vw"
