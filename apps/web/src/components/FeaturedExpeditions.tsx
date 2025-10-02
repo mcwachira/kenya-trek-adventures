@@ -92,7 +92,7 @@ const FeaturedExpeditions = () => {
 
     const defaultImages: StaticImageData[] = [Aberdare, Amboseli, HellsGate];
 
-    const expeditions: Expedition[] =
+    const expeditions: Tour[] =
         tours && tours.length > 0 ? (tours as Expedition[]).slice(0, 3) : defaultExpeditions;
 
     if (loading) {
