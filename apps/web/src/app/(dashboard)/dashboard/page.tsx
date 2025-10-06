@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-
+import { Loader2 } from "lucide-react";
 import DashboardOverview from "@/components/dashboard/DashboardOverview";
 import BookingManagement from "@/components/dashboard/BookingManagement";
 import CustomerManagement from "@/components/dashboard/CustomerManagement";
@@ -67,7 +67,16 @@ const Dashboard = () => {
     localStorage.setItem("contacts", JSON.stringify(updatedContacts));
   };
 
-  return (
+
+    // if (isLoading) {
+    //     return (
+    //         <div className="min-h-screen flex items-center justify-center">
+    //             <Loader2 className="h-8 w-8 animate-spin text-green-600" />
+    //         </div>
+    //     );
+    // }
+
+    return (
     <>
       <div className="min-h-screen bg-gradient-to-b from-green-50 to-orange-50 dark:from-gray-900 dark:to-gray-800">
         <div className="pt-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
