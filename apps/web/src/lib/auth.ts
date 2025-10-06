@@ -51,6 +51,21 @@ export const signUpSchema = z
         path: ["confirmPassword"],
     })
 
+export const tourSchema =  z.object({
+    title: z.string().min(3, "Title must be at least 3 characters"),
+    description: z.string().min(20, "Description must be at least 20 characters"),
+    duration: z.string().min(1, "Duration is required"),
+    price: z.string().min(1, "Price is required"),
+    difficulty: z.enum(["Easy", "Moderate", "Challenging"]),
+    category: z.enum(["mount-kenya", "safari", "day-trip"]),
+    location: z.string().min(2, "Location is required"),
+    maxParticipants: z.number().min(1, "Must have at least 1 participant"),
+    status: z.enum(["active", "inactive"]),
+    highlights: z.string().min(5, "Add at least one highlight"),
+    included: z.string().min(5, "Add at least one included item"),
+});
+
+export type TourFormValues = z.infer<typeof tourSchema>;
 export type LoginFormData = z.infer<typeof loginSchema>;
 export type SignUpFormData = z.infer<typeof signUpSchema>;
 export type BookingFormData = z.infer<typeof bookingSchema>;
