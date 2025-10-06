@@ -2,13 +2,10 @@ import * as z from "zod";
 
 export const bookingSchema = z.object({
     name: z.string().min(2, "Full name must be at least 2 characters"),
-    email: z
-        .string()
-        .min(1, "Email is required")
-        .email("Please enter a valid email address"),
+    email: z.email({ pattern: z.regexes.html5Email }),
     phone: z
         .string()
-        .min(7, "Phone number must be at least 7 digits")
+        .min(10, "Phone number must be at least 10 digits")
         .max(15, "Phone number is too long"),
     service: z.string().min(1, "Please select a service"),
     participants: z.string().min(1, "Please select number of participants"),
@@ -17,15 +14,12 @@ export const bookingSchema = z.object({
 });
 
 export const loginSchema = z.object({
-    email: z
-        .string()
-        .min(1, "Email is required")
-        .email("Please enter a valid email address"),
+  email: z.email({ pattern: z.regexes.html5Email }),
 
     password: z
         .string()
         .min(1, "Password is required")
-        .min(8, "Password must be atleast 8 characters long"),
+        .min(8, "Password must be at least 8 characters long"),
 });
 
 export const signUpSchema = z
@@ -42,10 +36,7 @@ export const signUpSchema = z
         //   .min(3, "Name must be atleast 3 characters long")
         //   .max(50, "Name must be less than 50 characters"),
 
-        email: z
-            .string()
-            .min(1, "Email is required")
-            .email("Please eneter a valid email"),
+        email: z.email({ pattern: z.regexes.html5Email }),
 
         password: z
             .string()

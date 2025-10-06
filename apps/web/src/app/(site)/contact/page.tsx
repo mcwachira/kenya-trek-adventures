@@ -9,7 +9,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { MapPin, Phone, Mail, MessageCircle, Clock, Send } from "lucide-react";
+import { MapPin, Phone, Mail, MessageCircle, Clock, Send , Loader2} from "lucide-react";
+import ContactForm from "@/components/ContactForm";
 
 const Contact = () => {
   return (
@@ -47,122 +48,10 @@ const Contact = () => {
         <section className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             {/* Contact Form */}
-            <Card className="bg-white dark:bg-gray-800">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-green-800 dark:text-green-400">
-                  <Send className="h-6 w-6" />
-                  Send us a Message
-                </CardTitle>
-                <CardDescription>
-                  Tell us about your dream adventure and we will create a
-                  personalized itinerary
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <form className="space-y-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                        First Name
-                      </label>
-                      <input
-                        type="text"
-                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 dark:bg-gray-700 dark:text-white"
-                        placeholder="Your first name"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                        Last Name
-                      </label>
-                      <input
-                        type="text"
-                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 dark:bg-gray-700 dark:text-white"
-                        placeholder="Your last name"
-                      />
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                      Email Address
-                    </label>
-                    <input
-                      type="email"
-                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 dark:bg-gray-700 dark:text-white"
-                      placeholder="your@email.com"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                      Phone Number
-                    </label>
-                    <input
-                      type="tel"
-                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 dark:bg-gray-700 dark:text-white"
-                      placeholder="+1 (555) 123-4567"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                      Adventure Type
-                    </label>
-                    <select className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 dark:bg-gray-700 dark:text-white">
-                      <option>Select your adventure</option>
-                      <option>Mount Kenya Expedition</option>
-                      <option>Wildlife Safari</option>
-                      <option>Day Trip</option>
-                      <option>Custom Adventure</option>
-                    </select>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                      Message
-                    </label>
-                    <textarea
-                      rows={4}
-                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 dark:bg-gray-700 dark:text-white"
-                      placeholder="Tell us about your ideal adventure, dates, group size, and any special requirements..."
-                    ></textarea>
-                  </div>
-
-                  <Button className="w-full bg-green-700 hover:bg-green-800 text-white">
-                    Send Message
-                  </Button>
-                </form>
-              </CardContent>
-            </Card>
-
+           <ContactForm />
             {/* Contact Info Cards */}
             <div className="space-y-6">
-              {/*<Card className="bg-white dark:bg-gray-800">*/}
-              {/*  <CardHeader>*/}
-              {/*    <CardTitle className="flex items-center gap-2 text-green-800 dark:text-green-400">*/}
-              {/*      <MapPin className="h-6 w-6" />*/}
-              {/*      Visit Our Office*/}
-              {/*    </CardTitle>*/}
-              {/*  </CardHeader>*/}
-              {/*  <CardContent>*/}
-              {/*    <p className="text-gray-600 dark:text-gray-300 mb-4">*/}
-              {/*      Kenya Trek Adventures*/}
-              {/*      <br />*/}
-              {/*      Westlands Business Center*/}
-              {/*      <br />*/}
-              {/*      Nairobi, Kenya*/}
-              {/*      <br />*/}
-              {/*      P.O. Box 12345-00100*/}
-              {/*    </p>*/}
-              {/*    <Button*/}
-              {/*      variant="outline"*/}
-              {/*      className="border-green-600 text-green-600 hover:bg-green-50"*/}
-              {/*    >*/}
-              {/*      Get Directions*/}
-              {/*    </Button>*/}
-              {/*  </CardContent>*/}
-              {/*</Card>*/}
+
 
               <Card className="bg-white dark:bg-gray-800">
                 <CardHeader>
