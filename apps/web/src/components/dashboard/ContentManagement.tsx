@@ -1,5 +1,8 @@
 "use client";
 import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -12,6 +15,14 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import {
   Table,
   TableBody,
   TableCell,
@@ -20,202 +31,145 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Label } from "@/components/ui/label";
-import {
-  Plus,
-  Edit,
-  Trash2,
-  Eye,
-  Upload,
-  Image as ImageIcon,
-  Search,
-  Filter,
-  MessageSquare,
-} from "lucide-react";
-
-interface BlogPost {
-  id: number;
-  title: string;
-  slug: string;
-  excerpt: string;
-  content: string;
-  coverImage: string;
-  author: string;
-  publishedAt: string;
-  scheduledAt?: string;
-  status: "draft" | "published" | "scheduled";
-  tags: string[];
-  metaTitle: string;
-  metaDescription: string;
-  commentsCount: number;
-}
+import { Plus, Edit, Trash2, FileText, Search, Filter } from "lucide-react";
+import { toast } from "sonner";
+import { BlogPost } from "@/types";
+import { useBlogPosts } from "@/hooks/useBlogData";
+import { BlogFormValues, blogSchema } from "@/lib/auth";
 
 const ContentManagement = () => {
-  const [posts, setPosts] = useState<BlogPost[]>([
-    {
-      id: 1,
-      title: "Conquering Mount Kenya: A Complete Guide",
-      slug: "conquering-mount-kenya-complete-guide",
-      excerpt:
-        "Everything you need to know about climbing Kenya's highest peak",
-      content: "Mount Kenya is the second-highest mountain in Africa...",
-      coverImage: "/api/placeholder/400/250",
-      author: "Kenya Trek Adventures",
-      publishedAt: new Date().toISOString(),
-      status: "published",
-      tags: ["Mount Kenya", "Trekking", "Adventure"],
-      metaTitle: "Mount Kenya Climbing Guide - Kenya Trek Adventures",
-      metaDescription:
-        "Complete guide to climbing Mount Kenya with expert tips, routes, and safety information.",
-      commentsCount: 12,
-    },
-    {
-      id: 2,
-      title: "Wildlife Photography Tips for Safari",
-      slug: "wildlife-photography-tips-safari",
-      excerpt: "Capture stunning wildlife photos on your next safari adventure",
-      content:
-        "Safari photography requires patience and the right techniques...",
-      coverImage: "/api/placeholder/400/250",
-      author: "Safari Guide Team",
-      publishedAt: "",
-      scheduledAt: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
-      status: "scheduled",
-      tags: ["Photography", "Safari", "Wildlife"],
-      metaTitle: "Safari Photography Guide - Kenya Trek Adventures",
-      metaDescription:
-        "Expert tips for capturing amazing wildlife photos during your safari.",
-      commentsCount: 0,
-    },
-  ]);
+  const {
+    posts,
+    addPost,
+    updatePost,
+    deletePost,
+    isAddingPost,
+    isUpdatingPost,
+  } = useBlogPosts();
 
   const [showEditor, setShowEditor] = useState(false);
   const [editingPost, setEditingPost] = useState<BlogPost | null>(null);
-  const [showComments, setShowComments] = useState(false);
-  const [selectedPost, setSelectedPost] = useState<BlogPost | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [uploadingImage, setUploadingImage] = useState(false);
 
-  const [formData, setFormData] = useState({
-    title: "",
-    excerpt: "",
-    content: "",
-    coverImage: "",
-    tags: "",
-    metaTitle: "",
-    metaDescription: "",
-    status: "draft" as "draft" | "published" | "scheduled",
-    scheduledAt: "",
+  const form = useForm<BlogFormValues>({
+    resolver: zodResolver(blogSchema),
+    defaultValues: {
+      title: "",
+      excerpt: "",
+      content: "",
+      author_name: "Admin",
+      tags: "",
+      status: "draft",
+      meta_title: "",
+      meta_description: "",
+    },
   });
 
   const filteredPosts = posts.filter((post) => {
     const matchesSearch =
       post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      post.author.toLowerCase().includes(searchTerm.toLowerCase());
+      post.author_name.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesStatus =
       statusFilter === "all" || post.status === statusFilter;
     return matchesSearch && matchesStatus;
   });
 
-  const handleCreatePost = () => {
-    const newPost: BlogPost = {
-      id: Date.now(),
-      title: formData.title,
-      slug: formData.title
-        .toLowerCase()
-        .replace(/\s+/g, "-")
-        .replace(/[^a-z0-9-]/g, ""),
-      excerpt: formData.excerpt,
-      content: formData.content,
-      coverImage: formData.coverImage || "/api/placeholder/400/250",
-      author: "Admin",
-      publishedAt:
-        formData.status === "published" ? new Date().toISOString() : "",
-      scheduledAt:
-        formData.status === "scheduled" ? formData.scheduledAt : undefined,
-      status: formData.status,
-      tags: formData.tags
+  const uploadImage = async (file: File): Promise<string | null> => {
+    try {
+      setUploadingImage(true);
+      const fileExt = file.name.split(".").pop();
+      const fileName = `${Math.random().toString(36).substring(2)}-${Date.now()}.${fileExt}`;
+      const filePath = `blog/${fileName}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from("boma-listings")
+        .upload(filePath, file);
+
+      if (uploadError) throw uploadError;
+
+      const { data } = supabase.storage
+        .from("boma-listings")
+        .getPublicUrl(filePath);
+
+      return data.publicUrl;
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      toast.error("Failed to upload image");
+      return null;
+    } finally {
+      setUploadingImage(false);
+    }
+  };
+
+  const handleSubmit = async (values: BlogFormValues) => {
+    let coverImage = editingPost?.cover_image || "";
+
+    if (imageFile) {
+      const uploadedUrl = await uploadImage(imageFile);
+      if (uploadedUrl) coverImage = uploadedUrl;
+    }
+
+    const slug = values.title
+      .toLowerCase()
+      .replace(/\s+/g, "-")
+      .replace(/[^a-z0-9-]/g, "");
+
+    const postData = {
+      ...values,
+      slug,
+      cover_image: coverImage,
+      tags: values.tags
         .split(",")
         .map((tag) => tag.trim())
         .filter((tag) => tag.length > 0),
-      metaTitle: formData.metaTitle || formData.title,
-      metaDescription: formData.metaDescription || formData.excerpt,
-      commentsCount: 0,
+      meta_title: values.meta_title || values.title,
+      meta_description: values.meta_description || values.excerpt,
+      published_at:
+        values.status === "published" ? new Date().toISOString() : null,
     };
 
-    setPosts([newPost, ...posts]);
+    if (editingPost) {
+      const updatedPost: BlogPost = {
+        ...editingPost,
+        ...postData,
+        published_at:
+          values.status === "published" && !editingPost.published_at
+            ? new Date().toISOString()
+            : editingPost.published_at,
+      };
+      updatePost(updatedPost);
+    } else {
+      addPost(postData as any);
+    }
+
     setShowEditor(false);
-    resetForm();
+    setEditingPost(null);
+    setImageFile(null);
+    form.reset();
   };
 
   const handleEditPost = (post: BlogPost) => {
     setEditingPost(post);
-    setFormData({
+    form.reset({
       title: post.title,
       excerpt: post.excerpt,
       content: post.content,
-      coverImage: post.coverImage,
+      author_name: post.author_name,
       tags: post.tags.join(", "),
-      metaTitle: post.metaTitle,
-      metaDescription: post.metaDescription,
       status: post.status,
-      scheduledAt: post.scheduledAt || "",
+      meta_title: post.meta_title || "",
+      meta_description: post.meta_description || "",
     });
     setShowEditor(true);
   };
 
-  const handleUpdatePost = () => {
-    if (!editingPost) return;
-
-    const updatedPost: BlogPost = {
-      ...editingPost,
-      title: formData.title,
-      slug: formData.title
-        .toLowerCase()
-        .replace(/\s+/g, "-")
-        .replace(/[^a-z0-9-]/g, ""),
-      excerpt: formData.excerpt,
-      content: formData.content,
-      coverImage: formData.coverImage || "/api/placeholder/400/250",
-      publishedAt:
-        formData.status === "published" && !editingPost.publishedAt
-          ? new Date().toISOString()
-          : editingPost.publishedAt,
-      scheduledAt:
-        formData.status === "scheduled" ? formData.scheduledAt : undefined,
-      status: formData.status,
-      tags: formData.tags
-        .split(",")
-        .map((tag) => tag.trim())
-        .filter((tag) => tag.length > 0),
-      metaTitle: formData.metaTitle || formData.title,
-      metaDescription: formData.metaDescription || formData.excerpt,
-    };
-
-    setPosts(
-      posts.map((post) => (post.id === editingPost.id ? updatedPost : post)),
-    );
-    setShowEditor(false);
-    setEditingPost(null);
-    resetForm();
-  };
-
-  const handleDeletePost = (id: number) => {
-    setPosts(posts.filter((post) => post.id !== id));
-  };
-
-  const resetForm = () => {
-    setFormData({
-      title: "",
-      excerpt: "",
-      content: "",
-      coverImage: "",
-      tags: "",
-      metaTitle: "",
-      metaDescription: "",
-      status: "draft",
-      scheduledAt: "",
-    });
+  const handleDeletePost = (id: string) => {
+    if (confirm("Are you sure you want to delete this post?")) {
+      deletePost(id);
+    }
   };
 
   const getStatusColor = (status: string) => {
@@ -231,47 +185,6 @@ const ContentManagement = () => {
     }
   };
 
-  if (showComments && selectedPost) {
-    return (
-      <div className="space-y-6">
-        <div className="flex justify-between items-center">
-          <div>
-            <h2 className="text-2xl font-bold text-green-800 dark:text-green-400">
-              Comments
-            </h2>
-            <p className="text-gray-600 dark:text-gray-300">
-              Manage comments for {selectedPost.title}
-            </p>
-          </div>
-          <Button onClick={() => setShowComments(false)} variant="outline">
-            Back to Blog Posts
-          </Button>
-        </div>
-
-        <Card className="shadow-lg border-green-100 dark:border-green-800">
-          <CardHeader>
-            <CardTitle className="text-green-800 dark:text-green-400">
-              Comments ({selectedPost.commentsCount})
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              {selectedPost.commentsCount === 0 ? (
-                <p className="text-center text-gray-500 py-8">
-                  No comments yet
-                </p>
-              ) : (
-                <div className="text-center text-gray-500 py-8">
-                  Comments functionality would be implemented here
-                </div>
-              )}
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
-
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
@@ -284,7 +197,11 @@ const ContentManagement = () => {
           </p>
         </div>
         <Button
-          onClick={() => setShowEditor(true)}
+          onClick={() => {
+            setShowEditor(true);
+            setEditingPost(null);
+            form.reset();
+          }}
           className="bg-green-600 hover:bg-green-700"
         >
           <Plus className="h-4 w-4 mr-2" />
@@ -331,6 +248,7 @@ const ContentManagement = () => {
         </CardContent>
       </Card>
 
+      {/* Editor */}
       {showEditor && (
         <Card className="shadow-lg border-green-100 dark:border-green-800">
           <CardHeader>
@@ -344,173 +262,220 @@ const ContentManagement = () => {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="space-y-6">
-              {/* Basic Info */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="md:col-span-2">
-                  <Label htmlFor="title">Title *</Label>
-                  <Input
-                    id="title"
-                    value={formData.title}
-                    onChange={(e) =>
-                      setFormData({ ...formData, title: e.target.value })
-                    }
-                    placeholder="Enter blog post title"
-                  />
-                </div>
-
-                <div className="md:col-span-2">
-                  <Label htmlFor="excerpt">Excerpt *</Label>
-                  <Textarea
-                    id="excerpt"
-                    value={formData.excerpt}
-                    onChange={(e) =>
-                      setFormData({ ...formData, excerpt: e.target.value })
-                    }
-                    placeholder="Brief description of the post"
-                    rows={2}
-                  />
-                </div>
-
-                <div className="md:col-span-2">
-                  <Label htmlFor="coverImage">Cover Image URL</Label>
-                  <div className="flex gap-2">
-                    <Input
-                      id="coverImage"
-                      value={formData.coverImage}
-                      onChange={(e) =>
-                        setFormData({ ...formData, coverImage: e.target.value })
-                      }
-                      placeholder="https://example.com/image.jpg"
+            <Form {...form}>
+              <form
+                onSubmit={form.handleSubmit(handleSubmit)}
+                className="space-y-6"
+              >
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="md:col-span-2">
+                    <FormField
+                      control={form.control}
+                      name="title"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Title</FormLabel>
+                          <FormControl>
+                            <Input
+                              {...field}
+                              placeholder="Enter blog post title"
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
                     />
-                    <Button variant="outline" size="icon">
-                      <Upload className="h-4 w-4" />
-                    </Button>
+                  </div>
+
+                  <div className="md:col-span-2">
+                    <FormField
+                      control={form.control}
+                      name="excerpt"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Excerpt</FormLabel>
+                          <FormControl>
+                            <Textarea
+                              {...field}
+                              placeholder="Brief description of the post"
+                              rows={2}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+
+                  <div className="md:col-span-2">
+                    <FormLabel>Cover Image</FormLabel>
+                    <div className="flex items-center gap-2">
+                      <Input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) =>
+                          setImageFile(e.target.files?.[0] || null)
+                        }
+                        className="flex-1"
+                      />
+                      {uploadingImage && (
+                        <span className="text-sm">Uploading...</span>
+                      )}
+                    </div>
+                    {(imageFile || editingPost?.cover_image) && (
+                      <p className="text-sm text-gray-500 mt-1">
+                        {imageFile
+                          ? imageFile.name
+                          : "Current image will be kept"}
+                      </p>
+                    )}
+                  </div>
+
+                  <FormField
+                    control={form.control}
+                    name="status"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Status</FormLabel>
+                        <Select
+                          onValueChange={field.onChange}
+                          value={field.value}
+                        >
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            <SelectItem value="draft">Draft</SelectItem>
+                            <SelectItem value="published">
+                              Publish Now
+                            </SelectItem>
+                            <SelectItem value="scheduled">Schedule</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="author_name"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Author Name</FormLabel>
+                        <FormControl>
+                          <Input {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <div className="md:col-span-2">
+                    <FormField
+                      control={form.control}
+                      name="tags"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Tags (comma-separated)</FormLabel>
+                          <FormControl>
+                            <Input
+                              {...field}
+                              placeholder="Adventure, Trekking, Mount Kenya"
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
                   </div>
                 </div>
 
-                <div>
-                  <Label htmlFor="status">Status</Label>
-                  <Select
-                    value={formData.status}
-                    onValueChange={(
-                      value: "draft" | "published" | "scheduled",
-                    ) => setFormData({ ...formData, status: value })}
-                  >
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="draft">Draft</SelectItem>
-                      <SelectItem value="published">Publish Now</SelectItem>
-                      <SelectItem value="scheduled">Schedule</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                {formData.status === "scheduled" && (
-                  <div>
-                    <Label htmlFor="scheduledAt">Schedule Date</Label>
-                    <Input
-                      id="scheduledAt"
-                      type="datetime-local"
-                      value={formData.scheduledAt}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          scheduledAt: e.target.value,
-                        })
-                      }
-                    />
-                  </div>
-                )}
-
-                <div className="md:col-span-2">
-                  <Label htmlFor="tags">Tags (comma-separated)</Label>
-                  <Input
-                    id="tags"
-                    value={formData.tags}
-                    onChange={(e) =>
-                      setFormData({ ...formData, tags: e.target.value })
-                    }
-                    placeholder="Adventure, Trekking, Mount Kenya"
-                  />
-                </div>
-              </div>
-
-              {/* Content */}
-              <div>
-                <Label htmlFor="content">Content *</Label>
-                <Textarea
-                  id="content"
-                  value={formData.content}
-                  onChange={(e) =>
-                    setFormData({ ...formData, content: e.target.value })
-                  }
-                  placeholder="Write your blog post content here..."
-                  rows={12}
-                  className="font-mono"
+                <FormField
+                  control={form.control}
+                  name="content"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Content</FormLabel>
+                      <FormControl>
+                        <Textarea
+                          {...field}
+                          placeholder="Write your blog post content here..."
+                          rows={12}
+                          className="font-mono"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
                 />
-                <p className="text-sm text-gray-500 mt-1">
-                  Rich text editor would be integrated here (TinyMCE, Quill,
-                  etc.)
-                </p>
-              </div>
 
-              {/* SEO Settings */}
-              <div className="border-t pt-6">
-                <h3 className="text-lg font-semibold text-green-800 dark:text-green-400 mb-4">
-                  SEO Settings
-                </h3>
-                <div className="space-y-4">
-                  <div>
-                    <Label htmlFor="metaTitle">Meta Title</Label>
-                    <Input
-                      id="metaTitle"
-                      value={formData.metaTitle}
-                      onChange={(e) =>
-                        setFormData({ ...formData, metaTitle: e.target.value })
-                      }
-                      placeholder="SEO-optimized title (auto-filled from title if empty)"
+                <div className="border-t pt-6">
+                  <h3 className="text-lg font-semibold text-green-800 dark:text-green-400 mb-4">
+                    SEO Settings
+                  </h3>
+                  <div className="space-y-4">
+                    <FormField
+                      control={form.control}
+                      name="meta_title"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Meta Title (Optional)</FormLabel>
+                          <FormControl>
+                            <Input
+                              {...field}
+                              placeholder="SEO-optimized title"
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
                     />
-                  </div>
-                  <div>
-                    <Label htmlFor="metaDescription">Meta Description</Label>
-                    <Textarea
-                      id="metaDescription"
-                      value={formData.metaDescription}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          metaDescription: e.target.value,
-                        })
-                      }
-                      placeholder="SEO meta description (auto-filled from excerpt if empty)"
-                      rows={2}
+                    <FormField
+                      control={form.control}
+                      name="meta_description"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Meta Description (Optional)</FormLabel>
+                          <FormControl>
+                            <Textarea
+                              {...field}
+                              placeholder="SEO meta description"
+                              rows={2}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
                     />
                   </div>
                 </div>
-              </div>
 
-              <div className="flex gap-2 pt-4">
-                <Button
-                  onClick={editingPost ? handleUpdatePost : handleCreatePost}
-                  className="bg-green-600 hover:bg-green-700"
-                >
-                  {editingPost ? "Update Post" : "Create Post"}
-                </Button>
-                <Button
-                  variant="outline"
-                  onClick={() => {
-                    setShowEditor(false);
-                    setEditingPost(null);
-                    resetForm();
-                  }}
-                >
-                  Cancel
-                </Button>
-              </div>
-            </div>
+                <div className="flex gap-2">
+                  <Button
+                    type="submit"
+                    disabled={isAddingPost || isUpdatingPost || uploadingImage}
+                    className="bg-green-600 hover:bg-green-700"
+                  >
+                    {editingPost ? "Update Post" : "Create Post"}
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => {
+                      setShowEditor(false);
+                      setEditingPost(null);
+                      setImageFile(null);
+                      form.reset();
+                    }}
+                  >
+                    Cancel
+                  </Button>
+                </div>
+              </form>
+            </Form>
           </CardContent>
         </Card>
       )}
@@ -536,7 +501,7 @@ const ContentManagement = () => {
                     <TableHead>Author</TableHead>
                     <TableHead>Date</TableHead>
                     <TableHead>Status</TableHead>
-                    <TableHead>Comments</TableHead>
+                    <TableHead>Views</TableHead>
                     <TableHead>Actions</TableHead>
                   </TableRow>
                 </TableHeader>
@@ -549,68 +514,28 @@ const ContentManagement = () => {
                       <TableCell>
                         <div className="flex items-center gap-3">
                           <div className="w-12 h-12 bg-gradient-to-br from-green-400 to-green-600 rounded-lg flex items-center justify-center">
-                            <ImageIcon className="h-6 w-6 text-white" />
+                            <FileText className="h-6 w-6 text-white" />
                           </div>
                           <div>
                             <div className="font-medium">{post.title}</div>
                             <div className="text-sm text-gray-500 line-clamp-1">
                               {post.excerpt}
                             </div>
-                            <div className="flex flex-wrap gap-1 mt-1">
-                              {post.tags.slice(0, 2).map((tag, index) => (
-                                <Badge
-                                  key={index}
-                                  variant="secondary"
-                                  className="text-xs"
-                                >
-                                  {tag}
-                                </Badge>
-                              ))}
-                            </div>
                           </div>
                         </div>
                       </TableCell>
+                      <TableCell>{post.author_name}</TableCell>
                       <TableCell>
-                        <div className="font-medium">{post.author}</div>
-                      </TableCell>
-                      <TableCell>
-                        <div>
-                          {post.status === "published" && post.publishedAt && (
-                            <div className="text-sm">
-                              Published:{" "}
-                              {new Date(post.publishedAt).toLocaleDateString()}
-                            </div>
-                          )}
-                          {post.status === "scheduled" && post.scheduledAt && (
-                            <div className="text-sm">
-                              Scheduled:{" "}
-                              {new Date(post.scheduledAt).toLocaleDateString()}
-                            </div>
-                          )}
-                          {post.status === "draft" && (
-                            <div className="text-sm text-gray-500">Draft</div>
-                          )}
-                        </div>
+                        {post.published_at
+                          ? new Date(post.published_at).toLocaleDateString()
+                          : "Not published"}
                       </TableCell>
                       <TableCell>
                         <Badge className={getStatusColor(post.status)}>
                           {post.status}
                         </Badge>
                       </TableCell>
-                      <TableCell>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => {
-                            setSelectedPost(post);
-                            setShowComments(true);
-                          }}
-                          className="flex items-center gap-1"
-                        >
-                          <MessageSquare className="h-4 w-4" />
-                          {post.commentsCount}
-                        </Button>
-                      </TableCell>
+                      <TableCell>{post.views}</TableCell>
                       <TableCell>
                         <div className="flex gap-1">
                           <Button
@@ -620,13 +545,11 @@ const ContentManagement = () => {
                           >
                             <Edit className="h-4 w-4" />
                           </Button>
-                          <Button size="sm" variant="outline">
-                            <Eye className="h-4 w-4" />
-                          </Button>
                           <Button
                             size="sm"
-                            variant="destructive"
+                            variant="outline"
                             onClick={() => handleDeletePost(post.id)}
+                            className="text-red-600 hover:text-red-700"
                           >
                             <Trash2 className="h-4 w-4" />
                           </Button>
