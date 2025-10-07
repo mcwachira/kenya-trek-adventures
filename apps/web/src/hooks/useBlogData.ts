@@ -1,94 +1,150 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { BlogPost } from "@/types";
+import { toast } from "sonner";
 
-export interface BlogPost {
-  id: number;
-  title: string;
-  slug: string;
-  excerpt: string;
-  content: string;
-  coverImage: string;
-  author: string;
-  publishedAt: string;
-  status: "draft" | "published" | "scheduled";
-  tags: string[];
-  metaTitle: string;
-  metaDescription: string;
-}
+const fetchBlogPosts = async (): Promise<BlogPost[]> => {
+  const response = await fetch("/app/api/blog/list");
 
-const BLOG_STORAGE_KEY = "blog_posts";
+  const data = await response.json();
 
-const getPublishedPosts = (): BlogPost[] => {
-  const stored = localStorage.getItem(BLOG_STORAGE_KEY);
-  if (stored) {
-    const posts = JSON.parse(stored);
-    return posts.filter((post: BlogPost) => post.status === "published");
+  if (!data.success) {
+    throw new Error(data.error || "Failed to fetch blog posts");
   }
 
-  // Default published posts
-  const defaultPosts: BlogPost[] = [
-    {
-      id: 1,
-      title: "Conquering Mount Kenya: A Complete Guide",
-      slug: "conquering-mount-kenya-complete-guide",
-      excerpt:
-        "Everything you need to know about climbing Kenya's highest peak, from route selection to gear preparation.",
-      content:
-        "Mount Kenya is the second-highest mountain in Africa and offers some of the most spectacular high-altitude trekking experiences on the continent...",
-      coverImage:
-        "https://images.unsplash.com/photo-1482938289607-e9573fc25ebb?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-      author: "James Mwangi",
-      publishedAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
-      status: "published",
-      tags: ["Mount Kenya", "Trekking", "Adventure", "Guide"],
-      metaTitle: "Mount Kenya Climbing Guide - Kenya Trek Adventures",
-      metaDescription:
-        "Complete guide to climbing Mount Kenya with expert tips, routes, and safety information.",
-    },
-    {
-      id: 2,
-      title: "Wildlife Photography Tips for Your Safari",
-      slug: "wildlife-photography-tips-safari",
-      excerpt:
-        "Capture stunning wildlife photos on your next safari adventure with these professional tips and techniques.",
-      content:
-        "Safari photography requires patience, the right equipment, and understanding of animal behavior...",
-      coverImage:
-        "https://images.unsplash.com/photo-1466721591366-2d5fba72006d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-      author: "Sarah Wanjiku",
-      publishedAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
-      status: "published",
-      tags: ["Photography", "Safari", "Wildlife", "Tips"],
-      metaTitle: "Safari Photography Tips - Kenya Trek Adventures",
-      metaDescription:
-        "Expert tips for capturing amazing wildlife photos during your safari adventure.",
-    },
-    {
-      id: 3,
-      title: "Best Time to Visit Kenya for Wildlife Viewing",
-      slug: "best-time-visit-kenya-wildlife",
-      excerpt:
-        "Discover the optimal seasons for wildlife viewing in Kenya's national parks and reserves.",
-      content:
-        "Kenya offers incredible wildlife viewing opportunities year-round, but certain seasons provide better experiences...",
-      coverImage:
-        "https://images.unsplash.com/photo-1469041797191-50ace28483c3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-      author: "David Kiprop",
-      publishedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
-      status: "published",
-      tags: ["Kenya", "Wildlife", "Travel Tips", "Seasons"],
-      metaTitle: "Best Time to Visit Kenya - Wildlife Viewing Guide",
-      metaDescription:
-        "Learn about the best seasons for wildlife viewing in Kenya's top national parks.",
-    },
-  ];
+  return data.posts || [];
+};
 
-  localStorage.setItem(BLOG_STORAGE_KEY, JSON.stringify(defaultPosts));
-  return defaultPosts;
+//create a new blog posts
+const createBlogPost = async (postData: any): Promise<BlogPost> => {
+  const response = await fetch("/app/aoi/blog/create", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(postData),
+  });
+
+  const data = await response.json();
+
+  if (!data.success) {
+    throw new Error(data.error || "Failed to create a blog ");
+  }
+
+  return data.result;
+};
+
+//update a blog post
+const updateBlogPost = async (postData: any): Promise<BlogPost> => {
+  const response = await fetch("/app/aoi/blog/update", {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(postData),
+  });
+
+  const data = await response.json();
+
+  if (!data.success) {
+    throw new Error(data.error || "Failed to update blog ");
+  }
+
+  return data.result;
+};
+
+//delete a blog post
+const deleteBlogPost = async (postData: any): Promise<void> => {
+  const response = await fetch("/app/aoi/blog/update", {
+    method: "DELETE",
+  });
+
+  const data = await response.json();
+
+  if (!data.success) {
+    throw new Error(data.error || "Failed to delete blog ");
+  }
 };
 
 export const useBlogPosts = () => {
-  return useQuery({
+  const queryClient = useQueryClient();
+
+  //Fetch Posts
+
+  const {
+    data: posts = [],
+    isLoading,
+    error,
+  } = useQuery({
     queryKey: ["blog-posts"],
-    queryFn: () => getPublishedPosts(),
+    queryFn: fetchBlogPosts,
+  });
+
+  //create post mutation
+  const addPostMutation = useMutation({
+    mutationFn: createBlogPost,
+    onSuccess: (newPost) => {
+      queryClient.invalidateQueries({ queryKey: ["blog-posts"] });
+      toast.success("Blog post created successfull");
+    },
+    onError: (error: Error) => {
+      toast.error(error.message || "failed to create a blog post ");
+    },
+  });
+
+  // Update post mutation
+  const updatePostMutation = useMutation({
+    mutationFn: updateBlogPost,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["blog-posts"] });
+      toast.success("Blog post updated successfully!");
+    },
+    onError: (error: Error) => {
+      toast.error(error.message || "Failed to update blog post");
+    },
+  });
+  // Delete post mutation
+  const deletePostMutation = useMutation({
+    mutationFn: deleteBlogPost,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["blog-posts"] });
+      toast.success("Blog post deleted successfully!");
+    },
+    onError: (error: Error) => {
+      toast.error(error.message || "Failed to delete blog post");
+    },
+  });
+
+  return {
+    posts,
+    isLoading,
+    error,
+    addPost: addPostMutation.mutate,
+    updatePost: updatePostMutation.mutate,
+    deletePost: deletePostMutation.mutate,
+    isAddingPost: addPostMutation.isPending,
+    isUpdatingPost: updatePostMutation.isPending,
+    isDeletingPost: deletePostMutation.isPending,
+  };
+};
+
+//fetch authors for drop down
+export const useAuthors = () => {
+  return useQuery({
+    queryKey: ["authors"],
+    queryFn: async () => {
+      const response = await fetch("/app/api/authors/list");
+      const data = await response.json();
+
+      return data.success ? data.authors : [];
+    },
+  });
+};
+
+//fetch categories for drop down
+export const useCategories = () => {
+  return useQuery({
+    queryKey: ["categories"],
+    queryFn: async () => {
+      const response = await fetch("/app/api/categories/list");
+      const data = await response.json();
+
+      return data.success ? data.categories : [];
+    },
   });
 };
