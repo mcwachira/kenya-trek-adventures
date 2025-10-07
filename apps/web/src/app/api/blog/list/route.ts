@@ -9,22 +9,31 @@ export async function GET(req: Request) {
     const offset = parseInt(searchParams.get("offset") || "0");
 
     const query = `{
-         "posts": *[_type == "blogPost"] | order(publishedAt desc) [$offset...$end] {
-           _id,
-           title,
-           content,
-           publishedAt,
-           author->{
-             _id,
-             name
-           },
-           categories[]->{
-             _id,
-             title
-           }
-         },
-         "total": count(*[_type == "blogPost"])
-       }`;
+      "posts": *[_type == "blogPost"] | order(publishedAt desc) [$offset...$end] {
+        _id,
+        title,
+        "slug": slug.current,
+        excerpt,
+        content,
+        publishedAt,
+        status,
+        tags,
+        metaTitle,
+        metaDescription,
+        "mainImage": mainImage.asset->url,
+        "author": author->{
+          name,
+          "slug": slug.current,
+          "image": image.asset->url
+        },
+        "categories": categories[]->{
+          _id,
+          title,
+          "slug": slug.current
+        }
+      },
+      "total": count(*[_type == "blogPost"])
+    }`;
 
     const result = await client.fetch(query, {
       offset,
