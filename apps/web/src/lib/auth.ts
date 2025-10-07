@@ -77,14 +77,15 @@ export const regionalSchema = z.object({
 });
 
 export const blogSchema = z.object({
-  title: z.string().min(3, "Title must be at least 3 characters"),
-  excerpt: z.string().min(20, "Excerpt must be at least 20 characters"),
-  content: z.string().min(50, "Content must be at least 50 characters"),
-  author_name: z.string().min(2, "Author name is required"),
-  tags: z.string().min(2, "Add at least one tag"),
+  title: z.string().min(1, "Title is required"),
+  excerpt: z.string().optional(),
+  content: z.string().min(1, "Content is required"),
+  author: z.string().optional(), // This will be the author _id
+  tags: z.string().optional(),
   status: z.enum(["draft", "published", "scheduled"]),
-  meta_title: z.string().optional(),
-  meta_description: z.string().optional(),
+  metaTitle: z.string().optional(),
+  metaDescription: z.string().optional(),
+  categories: z.array(z.string()).optional(),
 });
 
 export type TourFormValues = z.infer<typeof tourSchema>;
