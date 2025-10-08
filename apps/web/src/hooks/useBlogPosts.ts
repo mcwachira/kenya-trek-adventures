@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { BlogPost } from "@/types";
 import { toast } from "sonner";
 
+//fetch a list of blog posts
 const fetchBlogPosts = async (): Promise<BlogPost[]> => {
   const response = await fetch("/api/blog/list");
 
