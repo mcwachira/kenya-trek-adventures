@@ -34,7 +34,7 @@ import { Badge } from "@/components/ui/badge";
 import { Plus, Edit, Trash2, FileText, Search, Filter } from "lucide-react";
 import { toast } from "sonner";
 import { BlogPost } from "@/types";
-import { useBlogPosts } from "@/hooks/useBlogData";
+import { useAuthors, useBlogPosts, useCategories } from "@/hooks/useBlogData";
 import { BlogFormValues, blogSchema } from "@/lib/auth";
 
 const ContentManagement = () => {
@@ -46,6 +46,9 @@ const ContentManagement = () => {
     isAddingPost,
     isUpdatingPost,
   } = useBlogPosts();
+
+  const { data: authors = [] } = useAuthors();
+  const { data: categories = [] } = useCategories();
 
   const [showEditor, setShowEditor] = useState(false);
   const [editingPost, setEditingPost] = useState<BlogPost | null>(null);
@@ -60,41 +63,35 @@ const ContentManagement = () => {
       title: "",
       excerpt: "",
       content: "",
-      author_name: "Admin",
+      author: "",
       tags: "",
       status: "draft",
-      meta_title: "",
-      meta_description: "",
+      metaTitle: "",
+      metaDescription: "",
+      categories: [],
     },
   });
 
-  const filteredPosts = posts.filter((post) => {
-    const matchesSearch =
-      post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      post.author_name.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesStatus =
-      statusFilter === "all" || post.status === statusFilter;
-    return matchesSearch && matchesStatus;
-  });
-
-  const uploadImage = async (file: File): Promise<string | null> => {
+  // Upload image to Sanity via API
+  const uploadImageToSanity = async (file: File): Promise<string | null> => {
     try {
       setUploadingImage(true);
-      const fileExt = file.name.split(".").pop();
-      const fileName = `${Math.random().toString(36).substring(2)}-${Date.now()}.${fileExt}`;
-      const filePath = `blog/${fileName}`;
+      const formData = new FormData();
+      formData.append("file", file);
 
-      const { error: uploadError } = await supabase.storage
-        .from("boma-listings")
-        .upload(filePath, file);
+      const response = await fetch("/api/blog/upload-image", {
+        method: "POST",
+        body: formData,
+      });
 
-      if (uploadError) throw uploadError;
+      const data = await response.json();
 
-      const { data } = supabase.storage
-        .from("boma-listings")
-        .getPublicUrl(filePath);
-
-      return data.publicUrl;
+      if (data.success) {
+        return data.assetId; // Return asset ID
+      } else {
+        toast.error(data.error || "Failed to upload image");
+        return null;
+      }
     } catch (error) {
       console.error("Error uploading image:", error);
       toast.error("Failed to upload image");
@@ -104,43 +101,38 @@ const ContentManagement = () => {
     }
   };
 
-  const handleSubmit = async (values: BlogFormValues) => {
-    let coverImage = editingPost?.cover_image || "";
+  //update handle submit
+  const handleSubmit = async (values: z.infer<typeof blogSchema>) => {
+    let coverImage = editingPost?.mainImage || "";
 
     if (imageFile) {
-      const uploadedUrl = await uploadImage(imageFile);
-      if (uploadedUrl) coverImage = uploadedUrl;
+      const uploadedAssetId = await uploadImageToSanity(imageFile);
+      if (uploadedAssetId) coverImage = uploadedAssetId;
     }
 
-    const slug = values.title
-      .toLowerCase()
-      .replace(/\s+/g, "-")
-      .replace(/[^a-z0-9-]/g, "");
-
     const postData = {
-      ...values,
-      slug,
-      cover_image: coverImage,
+      title: values.title,
+      excerpt: values.excerpt,
+      content: values.content,
+      author: values.author,
+      status: values.status,
       tags: values.tags
-        .split(",")
-        .map((tag) => tag.trim())
-        .filter((tag) => tag.length > 0),
-      meta_title: values.meta_title || values.title,
-      meta_description: values.meta_description || values.excerpt,
-      published_at:
-        values.status === "published" ? new Date().toISOString() : null,
+        ? values.tags
+            .split(",")
+            .map((tag) => tag.trim())
+            .filter(Boolean)
+        : [],
+      metaTitle: values.metaTitle || values.title,
+      metaDescription: values.metaDescription || values.excerpt,
+      mainImage: coverImage,
+      categories: values.categories,
     };
 
     if (editingPost) {
-      const updatedPost: BlogPost = {
-        ...editingPost,
+      updatePost({
+        _id: editingPost._id,
         ...postData,
-        published_at:
-          values.status === "published" && !editingPost.published_at
-            ? new Date().toISOString()
-            : editingPost.published_at,
-      };
-      updatePost(updatedPost);
+      });
     } else {
       addPost(postData as any);
     }
@@ -155,22 +147,35 @@ const ContentManagement = () => {
     setEditingPost(post);
     form.reset({
       title: post.title,
-      excerpt: post.excerpt,
-      content: post.content,
-      author_name: post.author_name,
-      tags: post.tags.join(", "),
-      status: post.status,
-      meta_title: post.meta_title || "",
-      meta_description: post.meta_description || "",
+      excerpt: post.excerpt || "",
+      content: post.content || "",
+      author: post.author?._id || "",
+      tags: post.tags?.join(", ") || "",
+      status: post.status || "draft",
+      metaTitle: post.metaTitle || "",
+      metaDescription: post.metaDescription || "",
+      categories: post.categories?.map((c) => c._id) || [],
     });
     setShowEditor(true);
   };
 
   const handleDeletePost = (id: string) => {
     if (confirm("Are you sure you want to delete this post?")) {
+      console.log(id);
       deletePost(id);
     }
   };
+
+  //Update filtered posts to use Sanity data structure
+  const filteredPosts = posts.filter((post) => {
+    console.log(post);
+    const matchesSearch =
+      post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      post.author?.name?.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesStatus =
+      statusFilter === "all" || post.status === statusFilter;
+    return matchesSearch && matchesStatus;
+  });
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -322,7 +327,7 @@ const ContentManagement = () => {
                         <span className="text-sm">Uploading...</span>
                       )}
                     </div>
-                    {(imageFile || editingPost?.cover_image) && (
+                    {(imageFile || editingPost?.mainImage) && (
                       <p className="text-sm text-gray-500 mt-1">
                         {imageFile
                           ? imageFile.name
@@ -361,13 +366,27 @@ const ContentManagement = () => {
 
                   <FormField
                     control={form.control}
-                    name="author_name"
+                    name="author"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Author Name</FormLabel>
-                        <FormControl>
-                          <Input {...field} />
-                        </FormControl>
+                        <FormLabel>Author</FormLabel>
+                        <Select
+                          onValueChange={field.onChange}
+                          value={field.value}
+                        >
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select author" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {authors.map((author: any) => (
+                              <SelectItem key={author._id} value={author._id}>
+                                {author.name}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
                         <FormMessage />
                       </FormItem>
                     )}
@@ -419,7 +438,7 @@ const ContentManagement = () => {
                   <div className="space-y-4">
                     <FormField
                       control={form.control}
-                      name="meta_title"
+                      name="metaTitle"
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Meta Title (Optional)</FormLabel>
@@ -435,7 +454,7 @@ const ContentManagement = () => {
                     />
                     <FormField
                       control={form.control}
-                      name="meta_description"
+                      name="metaDescription"
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Meta Description (Optional)</FormLabel>
@@ -480,7 +499,7 @@ const ContentManagement = () => {
         </Card>
       )}
 
-      {/* Posts Table */}
+      {/* Posts Table - FIXED */}
       <Card className="shadow-lg border-green-100 dark:border-green-800">
         <CardHeader>
           <CardTitle className="text-green-800 dark:text-green-400">
@@ -501,21 +520,28 @@ const ContentManagement = () => {
                     <TableHead>Author</TableHead>
                     <TableHead>Date</TableHead>
                     <TableHead>Status</TableHead>
-                    <TableHead>Views</TableHead>
                     <TableHead>Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {filteredPosts.map((post) => (
                     <TableRow
-                      key={post.id}
+                      key={post._id}
                       className="hover:bg-gray-50 dark:hover:bg-gray-800/50"
                     >
                       <TableCell>
                         <div className="flex items-center gap-3">
-                          <div className="w-12 h-12 bg-gradient-to-br from-green-400 to-green-600 rounded-lg flex items-center justify-center">
-                            <FileText className="h-6 w-6 text-white" />
-                          </div>
+                          {post.mainImage?.asset?.url ? (
+                            <img
+                              src={post.mainImage.asset.url}
+                              alt={post.title}
+                              className="w-12 h-12 rounded-lg object-cover"
+                            />
+                          ) : (
+                            <div className="w-12 h-12 bg-gradient-to-br from-green-400 to-green-600 rounded-lg flex items-center justify-center">
+                              <FileText className="h-6 w-6 text-white" />
+                            </div>
+                          )}
                           <div>
                             <div className="font-medium">{post.title}</div>
                             <div className="text-sm text-gray-500 line-clamp-1">
@@ -524,18 +550,19 @@ const ContentManagement = () => {
                           </div>
                         </div>
                       </TableCell>
-                      <TableCell>{post.author_name}</TableCell>
+                      <TableCell>{post.author?.name || "Unknown"}</TableCell>
                       <TableCell>
-                        {post.published_at
-                          ? new Date(post.published_at).toLocaleDateString()
+                        {post.publishedAt
+                          ? new Date(post.publishedAt).toLocaleDateString()
                           : "Not published"}
                       </TableCell>
                       <TableCell>
-                        <Badge className={getStatusColor(post.status)}>
-                          {post.status}
+                        <Badge
+                          className={getStatusColor(post.status || "draft")}
+                        >
+                          {post.status || "draft"}
                         </Badge>
                       </TableCell>
-                      <TableCell>{post.views}</TableCell>
                       <TableCell>
                         <div className="flex gap-1">
                           <Button
@@ -548,7 +575,7 @@ const ContentManagement = () => {
                           <Button
                             size="sm"
                             variant="outline"
-                            onClick={() => handleDeletePost(post.id)}
+                            onClick={() => handleDeletePost(post._id)}
                             className="text-red-600 hover:text-red-700"
                           >
                             <Trash2 className="h-4 w-4" />
