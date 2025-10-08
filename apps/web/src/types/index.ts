@@ -159,6 +159,7 @@ export interface Tour {
   price: number;
   image?: SanityImage;
   imageUrl?: string; // Processed image URL
+  location?: string;
   highlights?: string[];
   elevation?: string;
   route?: string;
@@ -176,6 +177,7 @@ export interface TourFormData {
   price: number;
   image?: File | SanityImage;
   imageUrl?: string;
+  location?: string;
   highlights?: string[];
   elevation?: string;
   route?: string;
