@@ -1,0 +1,4 @@
+{
+  "buildCommand": "if [ \"$VERCEL_ENV\" = \"production\" ]; then echo '🛑 Skipping Studio build'; else pnpm run build; fi",
+  "installCommand": "pnpm install --frozen-lockfile"
+}

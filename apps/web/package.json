@@ -5,6 +5,7 @@
   "scripts": {
     "build": "next build",
     "dev": "next dev --turbopack",
+     "dev:studio": "sanity dev",
     "lint": "eslint . --max-warnings 0",
     "start": "next start"
   },
