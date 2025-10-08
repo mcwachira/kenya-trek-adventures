@@ -8,10 +8,12 @@
       "dependsOn": ["^build"],
       "env": [
         "NEXT_PUBLIC_API_HOST",
+        "NODE_ENV",
         "SANITY_API_TOKEN",
         "SANITY_STUDIO_PROJECT_ID",
         "SANITY_STUDIO_DATASET",
-        "SANITY_STUDIO_API_VERSION"]
+        "SANITY_STUDIO_API_VERSION"
+      ]
     },
     "test": {
       "outputs": ["coverage/**"],
