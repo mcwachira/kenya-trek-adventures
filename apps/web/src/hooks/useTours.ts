@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Tour, TourFormData } from "@/types/";
+import { Tour, TourCategory, TourFormData } from "@/types/";
 import { toast } from "sonner";
 
 //Helper function to convert file to base64
@@ -18,11 +18,13 @@ const fileToBase64 = (file: File): Promise<string> => {
 
 //Fetch all tours
 const fetchTours = async (filters?: {
+  category?: TourCategory;
   difficulty?: string;
   minPrice?: number;
   maxPrice?: number;
 }): Promise<Tour[]> => {
   const params = new URLSearchParams();
+  if (filters?.category) params.append("category", filters.category);
   if (filters?.difficulty) params.append("difficulty", filters.difficulty);
   if (filters?.minPrice) params.append("minPrice", filters.minPrice.toString());
   if (filters?.maxPrice) params.append("maxPrice", filters.maxPrice.toString());
@@ -104,6 +106,7 @@ const deleteTour = async (tourId: string): Promise<void> => {
 };
 
 export const useToursData = (filters?: {
+  category?: TourCategory;
   difficulty?: string;
   minPrice?: number;
   maxPrice?: number;
