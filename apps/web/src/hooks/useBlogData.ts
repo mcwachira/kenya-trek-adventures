@@ -3,7 +3,7 @@ import { BlogPost } from "@/types";
 import { toast } from "sonner";
 
 const fetchBlogPosts = async (): Promise<BlogPost[]> => {
-  const response = await fetch("/app/api/blog/list");
+  const response = await fetch("/api/blog/list");
 
   const data = await response.json();
 
@@ -16,7 +16,7 @@ const fetchBlogPosts = async (): Promise<BlogPost[]> => {
 
 //create a new blog posts
 const createBlogPost = async (postData: any): Promise<BlogPost> => {
-  const response = await fetch("/app/aoi/blog/create", {
+  const response = await fetch("/api/blog/create", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(postData),
@@ -33,7 +33,7 @@ const createBlogPost = async (postData: any): Promise<BlogPost> => {
 
 //update a blog post
 const updateBlogPost = async (postData: any): Promise<BlogPost> => {
-  const response = await fetch("/app/aoi/blog/update", {
+  const response = await fetch("/api/blog/update", {
     method: "PATCH",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(postData),
@@ -49,8 +49,9 @@ const updateBlogPost = async (postData: any): Promise<BlogPost> => {
 };
 
 //delete a blog post
-const deleteBlogPost = async (postData: any): Promise<void> => {
-  const response = await fetch("/app/aoi/blog/update", {
+const deleteBlogPost = async (postId: string): Promise<void> => {
+  const url = `/api/blog/delete?_id=${encodeURIComponent(postId)}`;
+  const response = await fetch(url, {
     method: "DELETE",
   });
 
@@ -128,7 +129,7 @@ export const useAuthors = () => {
   return useQuery({
     queryKey: ["authors"],
     queryFn: async () => {
-      const response = await fetch("/app/api/authors/list");
+      const response = await fetch("/api/authors/list");
       const data = await response.json();
 
       return data.success ? data.authors : [];
@@ -141,7 +142,7 @@ export const useCategories = () => {
   return useQuery({
     queryKey: ["categories"],
     queryFn: async () => {
-      const response = await fetch("/app/api/categories/list");
+      const response = await fetch("/api/categories/list");
       const data = await response.json();
 
       return data.success ? data.categories : [];

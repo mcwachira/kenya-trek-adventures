@@ -4,6 +4,7 @@ import { sanityWriteClient } from "@/sanity/lib/client";
 export async function DELETE(req: Request) {
   try {
     const { searchParams } = new URL(req.url);
+    console.log(searchParams);
     const _id = searchParams.get("_id");
 
     if (!_id) {
