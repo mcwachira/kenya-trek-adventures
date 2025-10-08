@@ -14,7 +14,7 @@ import {
   Clock,
   Tag,
 } from "lucide-react";
-import { useBlogPosts } from "@/hooks/useBlogData";
+import { useBlogPosts } from "@/hooks/useBlogPosts";
 import { BlogPost as BlogPostType } from "@/types/index";
 // import { urlFor } from "@/sanity/lib/image";
 
@@ -41,7 +41,7 @@ const BlogPostCard = ({ blog }: { blog: BlogPostType }) => {
   };
   return (
     <Card className="group hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col h-full border-border hover:border-primary/50">
-      <Link href={`/blog/${blog.slug.current}`} className="block">
+      <Link href={`/blog/${blog.slug}`} className="block">
         <div className="relative aspect-video bg-muted overflow-hidden">
           {blog.mainImage ? (
             <Image
@@ -149,7 +149,7 @@ const BlogPostCard = ({ blog }: { blog: BlogPostType }) => {
           </div>
         )}
         {/* Read More Button */}
-        <Link href={`/blog/${blog.slug.current}`} className="block">
+        <Link href={`/blog/${blog.slug}`} className="block">
           <Button
             variant="ghost"
             className="w-full justify-between p-0 h-auto font-semibold text-primary hover:text-primary/80 hover:bg-transparent group/btn"

@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import { client } from "@/sanity/lib/client";
-import { sanityWriteClient } from "@/sanity/lib/client";
 
 export async function GET(req: Request) {
   try {

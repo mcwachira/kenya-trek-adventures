@@ -9,7 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { MapPin, Phone, Mail, MessageCircle, Clock, Send , Loader2} from "lucide-react";
+import { Phone, Mail, MessageCircle, Clock } from "lucide-react";
 import ContactForm from "@/components/ContactForm";
 
 const Contact = () => {
@@ -48,11 +48,9 @@ const Contact = () => {
         <section className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             {/* Contact Form */}
-           <ContactForm />
+            <ContactForm />
             {/* Contact Info Cards */}
             <div className="space-y-6">
-
-
               <Card className="bg-white dark:bg-gray-800">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2 text-green-800 dark:text-green-400">
