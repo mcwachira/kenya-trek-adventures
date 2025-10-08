@@ -1,4 +1,5 @@
-"use client"
+"use client";
+
 import { useState } from "react";
 import Header from "@/components/Header";
 import { Button } from "@/components/ui/button";
@@ -10,129 +11,25 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Clock, MapPin, Users, Camera } from "lucide-react";
-
-import LakeNakuru from "@/assets/lake-nakuru.jpg";
-import KiambuCoffee from "@/assets/kiambu-coffee-farms.jpg";
-import NairobiNationalPark from "@/assets/Nairobi-park.jpg"
-import HellsGate from "@/assets/hells-gate.jpg"
-import OlPajeta from "@/assets/Ol-Pejeta-Conservancy.jpg"
-import LakeNaivasha from "@/assets/lake-naivasha.jpg"
 import Image from "next/image";
 import BookingForm from "@/components/BookingForm";
+import { useToursByCategory } from "@/hooks/useToursByCategory";
 
 const DayTrips = () => {
-    const [showBooking, setShowBooking] = useState(false);
-    const [selectedTrip, setSelectedTrip] = useState("");
-    // const { tours: dayTrips, isLoading, error } = useToursByCategory('day-trip');
+  const [showBooking, setShowBooking] = useState(false);
+  const [selectedTrip, setSelectedTrip] = useState("");
 
-    const handleBookTrip = (tripName: string) => {
-        setSelectedTrip(tripName);
-        setShowBooking(true);
-    };
-  const dayTrips = [
-    {
-      name: "Hell's Gate National Park",
-      duration: "Full Day",
-      distance: "90km from Nairobi",
-      price: "$120",
-      image:
-       HellsGate,
-      activities: [
-        "Rock Climbing",
-        "Cycling",
-        "Gorge Walking",
-        "Wildlife Viewing",
-      ],
-      description:
-        "Unique park where you can walk, cycle and rock climb among wildlife",
-    },
-    {
-      name: "Lake Nakuru Day Safari",
-      duration: "Full Day",
-      distance: "160km from Nairobi",
-      price: "$180",
-      image:
-        LakeNakuru,
-      activities: [
-        "Game Drives",
-        "Flamingo Watching",
-        "Rhino Spotting",
-        "Bird Photography",
-      ],
-      description: "Famous for its pink flamingos and endangered white rhinos",
-    },
-    {
-      name: "Nairobi National Park",
-      duration: "Half Day",
-      distance: "10km from Nairobi",
-      price: "$80",
-      image:
-      NairobiNationalPark,
-      activities: [
-        "Game Drives",
-        "Lion Viewing",
-        "City Skyline Views",
-        "Ivory Burning Site",
-      ],
-      description:
-        "The only national park in the world with city skyline backdrop",
-    },
-    {
-      name: "Ol Pejeta Conservancy",
-      duration: "Full Day",
-      distance: "200km from Nairobi",
-      price: "$220",
-      image:
-      OlPajeta,
-      activities: [
-        "Rhino Sanctuary",
-        "Chimpanzee Sanctuary",
-        "Night Drives",
-        "Conservation Tours",
-      ],
-      description:
-        "Home to the last two northern white rhinos and rescued chimpanzees",
-    },
-    {
-      name: "Lake Naivasha Boat Safari",
-      duration: "Full Day",
-      distance: "90km from Nairobi",
-      price: "$150",
-      image:
-       LakeNaivasha,
-      activities: [
-        "Boat Safari",
-        "Hippo Watching",
-        "Crescent Island Walk",
-        "Elsamere Visit",
-      ],
-      description:
-        "Freshwater lake with abundant birdlife and hippo populations",
-    },
-    {
-      name: "Kiambu Coffee Farm Tour",
-      duration: "Half Day",
-      distance: "30km from Nairobi",
-      price: "$60",
-      image:
-        KiambuCoffee,
-      activities: [
-        "Coffee Tasting",
-        "Farm Tours",
-        "Processing Demo",
-        "Cultural Experience",
-      ],
-      description: "Learn about Kenya's famous coffee from bean to cup",
-    },
-  ];
+  const { tours, isLoading, error } = useToursByCategory({
+    category: "day-trip",
+  });
+
+  const handleBookTrip = (tripName: string) => {
+    setSelectedTrip(tripName);
+    setShowBooking(true);
+  };
 
   return (
     <>
-      {/* <SEO
-        title="Kenya Day Trips | Hell's Gate, Lake Nakuru & More"
-        description="Perfect day adventures from Nairobi. Explore Hell's Gate, Lake Nakuru, Nairobi National Park and more with our expert guides."
-        keywords="Kenya day trips, Hell's Gate, Lake Nakuru, Nairobi National Park, day safari"
-      /> */}
       <div className="min-h-screen bg-gradient-to-b from-green-50 to-orange-50 dark:from-gray-900 dark:to-gray-800">
         <Header />
 
@@ -147,7 +44,7 @@ const DayTrips = () => {
 
           <div className="relative z-10 text-center text-white max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <h1 className="text-4xl md:text-6xl font-bold mb-6">
-              Kenya Day
+              Kenya Day{" "}
               <span className="block text-orange-400">Adventures</span>
             </h1>
             <p className="text-xl md:text-2xl mb-8 text-gray-200 max-w-2xl mx-auto">
@@ -156,7 +53,7 @@ const DayTrips = () => {
             </p>
             <Button
               size="lg"
-              className=" cursor-pointer bg-orange-600 hover:bg-orange-700 text-white px-8 py-4 text-lg"
+              className="cursor-pointer bg-orange-600 hover:bg-orange-700 text-white px-8 py-4 text-lg"
               onClick={() => setShowBooking(true)}
             >
               Book Day Trip
@@ -164,7 +61,7 @@ const DayTrips = () => {
           </div>
         </section>
 
-        {/* Day Trips Grid */}
+        {/* Day Trips Section */}
         <section className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-green-800 dark:text-green-400 mb-4">
@@ -176,68 +73,105 @@ const DayTrips = () => {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {dayTrips.map((trip, index) => (
-              <Card
-                key={index}
-                className="bg-white dark:bg-gray-800 overflow-hidden hover:shadow-lg transition-shadow"
-              >
-                  <div className="relative w-full aspect-video">
+          {/* Loading & Error */}
+          {isLoading && (
+            <p className="text-center text-gray-500">Loading day trips...</p>
+          )}
+          {error && (
+            <p className="text-center text-red-500">
+              Failed to load tours:{" "}
+              {error instanceof Error ? error.message : "Unknown error"}
+            </p>
+          )}
+
+          {/* Tours Grid */}
+          {!isLoading && !error && tours.length > 0 && (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {tours.map((trip: any, index: number) => (
+                <Card
+                  key={trip._id}
+                  className="bg-white dark:bg-gray-800 overflow-hidden hover:shadow-lg transition-shadow rounded-2xl"
+                >
+                  {/* Tour Image */}
+                  {trip.imageUrl ? (
+                    <div className="relative w-full aspect-video">
                       <Image
-                          src={trip.image}
-                          alt={trip.name}
-                          fill
-                          className="object-cover"
-                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                          priority={index === 0} // make the first image preload
+                        src={trip.imageUrl}
+                        alt={trip.title}
+                        fill
+                        className="object-cover"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        priority={index === 0}
                       />
                       <div className="absolute top-4 right-4 bg-orange-600 text-white px-3 py-1 rounded-full text-sm font-semibold">
-                          {trip.price}
-                      </div>
-                  </div>
-                <CardHeader>
-                  <CardTitle className="text-green-800 dark:text-green-400">
-                    {trip.name}
-                  </CardTitle>
-                  <CardDescription>{trip.description}</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    <div className="flex justify-between items-center text-sm text-gray-600 dark:text-gray-300">
-                      <span className="flex items-center gap-2">
-                        <Clock className="h-4 w-4" />
-                        {trip.duration}
-                      </span>
-                      <span className="flex items-center gap-2">
-                        <MapPin className="h-4 w-4" />
-                        {trip.distance}
-                      </span>
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-green-800 dark:text-green-400 mb-2">
-                        Activities:
-                      </h4>
-                      <div className="flex flex-wrap gap-2">
-                        {trip.activities.map((activity, i) => (
-                          <span
-                            key={i}
-                            className="bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-300 px-2 py-1 rounded-full text-xs"
-                          >
-                            {activity}
-                          </span>
-                        ))}
+                        ${trip.price}
                       </div>
                     </div>
-                    <Button className="cursor-pointer w-full bg-green-700 hover:bg-green-800 text-white"
-                            onClick={() => handleBookTrip(trip.name)}
-                    >
-                      Book Now
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+                  ) : (
+                    <div className="w-full aspect-video bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
+                      <MapPin className="h-10 w-10 text-gray-400" />
+                    </div>
+                  )}
+
+                  {/* Tour Info */}
+                  <CardHeader>
+                    <CardTitle className="text-green-800 dark:text-green-400">
+                      {trip.title}
+                    </CardTitle>
+                    <CardDescription>{trip.description}</CardDescription>
+                  </CardHeader>
+
+                  <CardContent>
+                    <div className="space-y-4">
+                      <div className="flex justify-between items-center text-sm text-gray-600 dark:text-gray-300">
+                        <span className="flex items-center gap-2">
+                          <Clock className="h-4 w-4" />
+                          {trip.duration} days
+                        </span>
+                        <span className="flex items-center gap-2">
+                          <MapPin className="h-4 w-4" />
+                          {trip.route || "Kenya"}
+                        </span>
+                      </div>
+
+                      {trip.highlights?.length > 0 && (
+                        <div>
+                          <h4 className="font-semibold text-green-800 dark:text-green-400 mb-2">
+                            Highlights:
+                          </h4>
+                          <div className="flex flex-wrap gap-2">
+                            {trip.highlights.map(
+                              (highlight: string, i: number) => (
+                                <span
+                                  key={i}
+                                  className="bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-300 px-2 py-1 rounded-full text-xs"
+                                >
+                                  {highlight}
+                                </span>
+                              ),
+                            )}
+                          </div>
+                        </div>
+                      )}
+
+                      <Button
+                        className="cursor-pointer w-full bg-green-700 hover:bg-green-800 text-white"
+                        onClick={() => handleBookTrip(trip.title)}
+                      >
+                        Book Now
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          )}
+
+          {!isLoading && !error && tours.length === 0 && (
+            <p className="text-center text-gray-500 mt-6">
+              No day trips available at the moment.
+            </p>
+          )}
         </section>
 
         {/* Why Choose Day Trips */}
@@ -263,6 +197,7 @@ const DayTrips = () => {
                 Safe activities suitable for children and seniors
               </p>
             </div>
+
             <div className="text-center">
               <div className="w-16 h-16 bg-orange-600 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Clock className="h-8 w-8 text-white" />
@@ -274,6 +209,7 @@ const DayTrips = () => {
                 Half-day and full-day options available
               </p>
             </div>
+
             <div className="text-center">
               <div className="w-16 h-16 bg-orange-600 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Camera className="h-8 w-8 text-white" />
@@ -285,6 +221,7 @@ const DayTrips = () => {
                 Stunning landscapes and wildlife encounters
               </p>
             </div>
+
             <div className="text-center">
               <div className="w-16 h-16 bg-orange-600 rounded-full flex items-center justify-center mx-auto mb-4">
                 <MapPin className="h-8 w-8 text-white" />
@@ -299,15 +236,16 @@ const DayTrips = () => {
           </div>
         </section>
       </div>
-        {showBooking && (
-            <BookingForm
-                onClose={() => setShowBooking(false)}
-                serviceName={selectedTrip || "Kenya Day Trip"}
-            />
-        )}
+
+      {/* Booking Form Modal */}
+      {showBooking && (
+        <BookingForm
+          onClose={() => setShowBooking(false)}
+          serviceName={selectedTrip || "Kenya Day Trip"}
+        />
+      )}
     </>
   );
 };
 
 export default DayTrips;
-

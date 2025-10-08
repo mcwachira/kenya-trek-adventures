@@ -1,4 +1,5 @@
-"use client"
+"use client";
+
 import Header from "@/components/Header";
 import { Button } from "@/components/ui/button";
 import {
@@ -9,41 +10,18 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Mountain, Clock, CheckCircle } from "lucide-react";
-import {useState} from "react";
-// import {useToursByCategory} from "@/hooks/useToursData";
+import { useState } from "react";
+import Image from "next/image";
 import BookingForm from "@/components/BookingForm";
+import { useToursByCategory } from "@/hooks/useToursByCategory";
 
 const MountKenya = () => {
-
-    const [showBooking, setShowBooking] = useState(false);
-    const [selectedRoute, setSelectedRoute] = useState("");
-    // const { tours: routes, isLoading, error } = useToursByCategory('mount-kenya');
-
-  const routes = [
-    {
-      name: "Sirimon-Chogoria Route",
-      duration: "5 Days",
-      difficulty: "Moderate",
-      price: "$850",
-      description:
-        "The most scenic route combining the best of both Sirimon and Chogoria paths",
-    },
-    {
-      name: "Naro Moru Route",
-      duration: "4 Days",
-      difficulty: "Challenging",
-      price: "$750",
-      description:
-        "The fastest route to Point Lenana, ideal for experienced hikers",
-    },
-    {
-      name: "Chogoria Route",
-      duration: "5 Days",
-      difficulty: "Moderate",
-      price: "$800",
-      description: "The most beautiful route with stunning gorges and lakes",
-    },
-  ];
+  const [showBooking, setShowBooking] = useState(false);
+  const [selectedRoute, setSelectedRoute] = useState("");
+  const { tours, isLoading, error } = useToursByCategory({
+    category: "mount-kenya",
+  });
+  console.log(tours);
 
   const included = [
     "Professional mountain guide",
@@ -57,11 +35,6 @@ const MountKenya = () => {
 
   return (
     <>
-      {/* <SEO
-        title="Mount Kenya Expeditions | Professional Climbing Tours"
-        description="Conquer Africa's second highest peak with our expert-guided Mount Kenya expeditions. Multiple routes available for all skill levels."
-        keywords="Mount Kenya, climbing, Point Lenana, expedition, mountain guide, Kenya hiking"
-      /> */}
       <div className="min-h-screen bg-gradient-to-b from-green-50 to-orange-50 dark:from-gray-900 dark:to-gray-800">
         <Header />
 
@@ -83,13 +56,13 @@ const MountKenya = () => {
               Challenge yourself on Africa&apos;s second highest peak. Multiple
               routes to Point Lenana (4,985m) with expert guides.
             </p>
-              <Button
-                  size="lg"
-                  className="bg-orange-600 hover:bg-orange-700 text-white px-8 py-4 text-lg"
-                  onClick={() => setShowBooking(true)}
-              >
-                  Book Your Expedition
-              </Button>
+            <Button
+              size="lg"
+              className="bg-orange-600 hover:bg-orange-700 text-white px-8 py-4 text-lg"
+              onClick={() => setShowBooking(true)}
+            >
+              Book Your Expedition
+            </Button>
           </div>
         </section>
 
@@ -105,46 +78,91 @@ const MountKenya = () => {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {routes.map((route, index) => (
-              <Card
-                key={index}
-                className="bg-white dark:bg-gray-800 hover:shadow-lg transition-shadow"
-              >
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2 text-green-800 dark:text-green-400">
-                    <Mountain className="h-6 w-6" />
-                    {route.name}
-                  </CardTitle>
-                  <CardDescription>{route.description}</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    <div className="flex justify-between items-center">
-                      <span className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300">
-                        <Clock className="h-4 w-4" />
-                        {route.duration}
-                      </span>
-                      <span className="text-sm font-medium text-orange-600">
-                        {route.difficulty}
-                      </span>
+          {/* Loading & Error states */}
+          {isLoading && (
+            <p className="text-center text-gray-500">Loading routes...</p>
+          )}
+          {error && (
+            <p className="text-center text-red-500">
+              Failed to load tours:{" "}
+              {error instanceof Error ? error.message : "Unknown error"}
+            </p>
+          )}
+
+          {/* Routes Grid */}
+          {!isLoading && !error && tours.length > 0 && (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {tours.map((route: any) => (
+                <Card
+                  key={route._id}
+                  className="bg-white dark:bg-gray-800 hover:shadow-lg transition-shadow overflow-hidden rounded-2xl"
+                >
+                  {/* Image */}
+                  {route.imageUrl ? (
+                    <div className="relative w-full h-56">
+                      <Image
+                        src={route.imageUrl}
+                        alt={route.title}
+                        fill
+                        className="object-cover"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      />
                     </div>
-                    <div className="text-2xl font-bold text-green-800 dark:text-green-400">
-                      {route.price}
-                      <span className="text-sm text-gray-600 dark:text-gray-300">
-                        {" "}
-                        / person
-                      </span>
+                  ) : (
+                    <div className="w-full h-56 bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
+                      <Mountain className="h-10 w-10 text-gray-400" />
                     </div>
-                    <Button className="w-full bg-green-700 hover:bg-green-800 text-white"
-                            onClick={() => setShowBooking(true)}>
-                      Book This Route
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+                  )}
+
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2 text-green-800 dark:text-green-400">
+                      <Mountain className="h-6 w-6" />
+                      {route.title}
+                    </CardTitle>
+                    <CardDescription>{route.description}</CardDescription>
+                  </CardHeader>
+
+                  <CardContent>
+                    <div className="space-y-4">
+                      <div className="flex justify-between items-center">
+                        <span className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300">
+                          <Clock className="h-4 w-4" />
+                          {route.duration} days
+                        </span>
+                        <span className="text-sm font-medium text-orange-600">
+                          {route.difficulty}
+                        </span>
+                      </div>
+
+                      <div className="text-2xl font-bold text-green-800 dark:text-green-400">
+                        ${route.price?.toLocaleString()}
+                        <span className="text-sm text-gray-600 dark:text-gray-300">
+                          {" "}
+                          / person
+                        </span>
+                      </div>
+
+                      <Button
+                        className="w-full bg-green-700 hover:bg-green-800 text-white"
+                        onClick={() => {
+                          setSelectedRoute(route.title);
+                          setShowBooking(true);
+                        }}
+                      >
+                        Book This Route
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          )}
+
+          {!isLoading && !error && tours.length === 0 && (
+            <p className="text-center text-gray-500 mt-6">
+              No tours available for this category yet.
+            </p>
+          )}
         </section>
 
         {/* What's Included */}
@@ -169,12 +187,12 @@ const MountKenya = () => {
         </section>
       </div>
 
-        {showBooking && (
-            <BookingForm
-                onClose={() => setShowBooking(false)}
-                serviceName={selectedRoute || "Mount Kenya Expedition"}
-            />
-        )}
+      {showBooking && (
+        <BookingForm
+          onClose={() => setShowBooking(false)}
+          serviceName={selectedRoute || "Mount Kenya Expedition"}
+        />
+      )}
     </>
   );
 };
