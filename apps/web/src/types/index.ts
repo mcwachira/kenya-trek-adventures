@@ -131,74 +131,73 @@ export interface GalleryImage extends SanityImage {
   alt: string; // required alt per schema
 }
 
-// ✅ Product
-export interface Product {
+// types/tour.ts
+
+export interface ItineraryDay {
+  _key?: string;
+  day: number;
+  title: string;
+  description: string;
+  activities?: string[];
+  meals?: string[];
+  accommodation?: string;
+}
+
+export interface Tour {
   _id: string;
-  _type: "product";
-  name: string;
+  _type: "tour";
+  _createdAt: string;
+  _updatedAt: string;
+  title: string;
   slug: {
-    _type: "slug";
     current: string;
+    _type: "slug";
   };
-  image: SanityImage;
-  images: SanityImage[];
-  description?: string;
+  description: string;
+  duration: number;
+  difficulty: "Easy" | "Moderate" | "Challenging";
   price: number;
-  category?: {
-    _id: string;
-    name: string;
-    slug: {
-      current: string;
-    };
-  };
-  stock?: number;
-  inStock?: boolean;
-  roastLevel?: "Light" | "Medium" | "Dark";
-  origin?: string;
-  featured?: boolean;
-  tags?: string[];
-  specifications?: Specification[];
-
-  seo?: {
-    metaTitle?: string;
-    metaDescription?: string;
-    metaImage?: SanityImage;
-    openGraph?: {
-      ogTitle?: string;
-      ogDescription?: string;
-      ogImage?: SanityImage;
-    };
-  };
+  image?: SanityImage;
+  imageUrl?: string; // Processed image URL
+  highlights?: string[];
+  elevation?: string;
+  route?: string;
+  included?: string[];
+  excluded?: string[];
+  itinerary?: ItineraryDay[];
 }
 
-export interface Specification {
-  label: string;
-  value: string;
+export interface TourFormData {
+  title: string;
+  slug?: string;
+  description: string;
+  duration: number;
+  difficulty: "Easy" | "Moderate" | "Challenging";
+  price: number;
+  image?: File | SanityImage;
+  imageUrl?: string;
+  highlights?: string[];
+  elevation?: string;
+  route?: string;
+  included?: string[];
+  excluded?: string[];
+  itinerary?: ItineraryDay[];
 }
 
-// ✅ Cart
-export interface CartItem {
-  product: Product;
-  quantity: number;
+export interface TourListResponse {
+  success: boolean;
+  tours: Tour[];
+  error?: string;
 }
 
-// ✅ User
-export interface User {
-  id: string;
-  name: string;
-  email: string;
-  image?: string;
+export interface TourResponse {
+  success: boolean;
+  tour?: Tour;
+  error?: string;
 }
 
-// ✅ Review
-export interface Review {
-  _id: string;
-  product: {
-    _type: "reference";
-    _ref: string;
-  };
-  user: User;
-  rating: number;
-  comment: string;
-  createdAt: string;
+export interface RelatedToursResponse {
+  success: boolean;
+  tours: Tour[];
+  error?: string;
 }
