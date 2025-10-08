@@ -1,7 +1,7 @@
 // sanity/schemas/blogPost.ts
 import { defineType, defineField } from "sanity";
 
-export default defineType({
+export const blogPost = defineType({
   name: "blogPost",
   title: "Blog Post",
   type: "document",

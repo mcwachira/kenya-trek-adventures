@@ -34,7 +34,7 @@ import { Badge } from "@/components/ui/badge";
 import { Plus, Edit, Trash2, FileText, Search, Filter } from "lucide-react";
 import { toast } from "sonner";
 import { BlogPost } from "@/types";
-import { useAuthors, useBlogPosts, useCategories } from "@/hooks/useBlogData";
+import { useAuthors, useBlogPosts, useCategories } from "@/hooks/useBlogPosts";
 import { BlogFormValues, blogSchema } from "@/lib/auth";
 
 const ContentManagement = () => {
