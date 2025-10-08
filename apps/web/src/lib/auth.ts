@@ -67,7 +67,7 @@ export const tourSchema = z.object({
 
 export const companySchema = z.object({
   companyName: z.string().min(2, "Company name is required"),
-  email: z.string().email("Invalid email address"),
+  email: z.email({ pattern: z.regexes.html5Email }),
   phone: z.string().min(10, "Phone number is required"),
 });
 

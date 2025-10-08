@@ -67,7 +67,21 @@ export const blogPost = defineType({
       type: "array",
       of: [{ type: "string" }],
     }),
-
+    defineField({
+      name: "status",
+      title: "Status",
+      type: "string",
+      options: {
+        list: [
+          { title: "Draft", value: "draft" },
+          { title: "Published", value: "published" },
+          { title: "Scheduled", value: "scheduled" },
+        ],
+        layout: "radio",
+      },
+      initialValue: "draft",
+      validation: (Rule) => Rule.required(),
+    }),
     // 🔍 SEO Fields
     defineField({
       name: "metaTitle",
@@ -106,11 +120,17 @@ export const blogPost = defineType({
       author: "author.name",
       media: "mainImage",
     },
-    prepare(selection) {
-      const { author } = selection;
+    prepare(selection: {
+      title: string;
+      author?: string;
+      media?: any;
+      status?: string;
+    }) {
+      const { title, author, media, status } = selection;
       return {
-        ...selection,
-        subtitle: author ? `by ${author}` : "",
+        title,
+        subtitle: `${author || "No author"} • ${status || "draft"}`,
+        media,
       };
     },
   },

@@ -1,6 +1,6 @@
 import { createClient } from "next-sanity";
 
-import { apiVersion, dataset, projectId, apiToken } from "../env";
+import { apiVersion, dataset, projectId, token } from "../env";
 
 export const client = createClient({
   projectId,
@@ -13,7 +13,7 @@ export const sanityWriteClient = createClient({
   projectId,
   dataset,
   apiVersion,
-  apiToken,
+  token,
   useCdn: false, // Never use CDN for writes
 });
 

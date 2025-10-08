@@ -50,6 +50,9 @@ export interface ImageBlock {
   alt?: string;
 }
 
+// ✅ Blog Post Status Type
+export type BlogPostStatus = "draft" | "published" | "scheduled";
+
 // ✅ Blog
 export interface BlogPost {
   _id: string;
@@ -71,6 +74,7 @@ export interface BlogPost {
     slug: { current: string };
   }[];
   tags?: string[];
+  status?: BlogPostStatus;
   metaTitle?: string;
   metaDescription?: string;
   ogImage?: {
@@ -81,18 +85,21 @@ export interface BlogPost {
     alt?: string;
   };
   content?: any; // You can replace `any` with PortableText type if needed
-  author: {
-    name: string;
-    slug: { current: string };
-    image?: {
-      asset: {
+  author?:
+    | Author
+    | {
         _id: string;
-        url: string;
+        name: string;
+        slug?: { current: string };
+        image?: {
+          asset: {
+            _id: string;
+            url: string;
+          };
+          alt?: string;
+        };
+        bio?: any;
       };
-      alt?: string;
-    };
-    bio?: any; // Replace with a PortableText type if needed
-  };
 }
 
 export interface Author {
