@@ -20,6 +20,20 @@ export const tour = defineType({
       validation: (Rule) => Rule.required(),
     }),
     defineField({
+      name: "category",
+      title: "Category",
+      type: "string",
+      options: {
+        list: [
+          { title: "Mount Kenya", value: "mount-kenya" },
+          { title: "Day Trip", value: "day-trip" },
+          { title: "Safaris", value: "safaris" },
+        ],
+        layout: "radio",
+      },
+      validation: (Rule) => Rule.required(),
+    }),
+    defineField({
       name: "description",
       title: "Description",
       type: "text",
@@ -108,12 +122,22 @@ export const tour = defineType({
       media: "image",
       duration: "duration",
       difficulty: "difficulty",
+      category: "category",
     },
     prepare(selection) {
-      const { title, subtitle, media, duration, difficulty } = selection;
+      const { title, subtitle, media, duration, difficulty, category } =
+        selection;
+      const categoryLabel =
+        category === "mount-kenya"
+          ? "Mount Kenya"
+          : category === "day-trip"
+            ? "Day Trip"
+            : category === "safaris"
+              ? "Safaris"
+              : category;
       return {
         title: title,
-        subtitle: `${subtitle || "No location"} • ${duration} days • ${difficulty}`,
+        subtitle: `${categoryLabel} • ${subtitle || "No location"} • ${duration} days • ${difficulty}`,
         media: media,
       };
     },

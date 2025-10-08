@@ -133,6 +133,8 @@ export interface GalleryImage extends SanityImage {
 
 // types/tour.ts
 
+export type TourCategory = "mount-kenya" | "day-trip" | "safaris";
+
 export interface ItineraryDay {
   _key?: string;
   day: number;
@@ -153,12 +155,13 @@ export interface Tour {
     current: string;
     _type: "slug";
   };
+  category: TourCategory;
   description: string;
   duration: number;
   difficulty: "Easy" | "Moderate" | "Challenging";
   price: number;
   image?: SanityImage;
-  imageUrl?: string; // Processed image URL
+  imageUrl?: string;
   location?: string;
   highlights?: string[];
   elevation?: string;
@@ -171,6 +174,7 @@ export interface Tour {
 export interface TourFormData {
   title: string;
   slug?: string;
+  category: TourCategory;
   description: string;
   duration: number;
   difficulty: "Easy" | "Moderate" | "Challenging";
@@ -202,4 +206,30 @@ export interface RelatedToursResponse {
   success: boolean;
   tours: Tour[];
   error?: string;
+}
+
+// Helper function to get category label
+export const getCategoryLabel = (category: TourCategory): string => {
+  switch (category) {
+    case "mount-kenya":
+      return "Mount Kenya";
+    case "day-trip":
+      return "Day Trip";
+    case "safaris":
+      return "Safaris";
+    default:
+      return category;
+  }
+};
+
+// SanityImage interface (add if not already in your types)
+export interface SanityImage {
+  _type: "image";
+  asset: {
+    _id?: string;
+    url?: string;
+    _type?: "reference" | "sanity.imageAsset";
+    _ref?: string;
+  };
+  alt?: string;
 }
