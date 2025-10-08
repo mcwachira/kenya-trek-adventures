@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -41,7 +41,7 @@ import {
   List,
   Loader2,
 } from "lucide-react";
-import { Tour } from "@/types";
+import { Tour, TourCategory, getCategoryLabel } from "@/types";
 import { useToursData } from "@/hooks/useTours";
 import { TourFormValues, tourSchema } from "@/lib/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -58,10 +58,13 @@ const TourManagement = () => {
     isLoading,
   } = useToursData();
 
+  console.log(tours);
+
   const [showEditor, setShowEditor] = useState(false);
   const [editingTour, setEditingTour] = useState<Tour | null>(null);
   const [viewMode, setViewMode] = useState<"table" | "grid">("table");
   const [searchTerm, setSearchTerm] = useState("");
+  const [categoryFilter, setCategoryFilter] = useState<string>("all");
   const [difficultyFilter, setDifficultyFilter] = useState("all");
   const [imageFile, setImageFile] = useState<File | null>(null);
 
@@ -69,6 +72,7 @@ const TourManagement = () => {
     resolver: zodResolver(tourSchema),
     defaultValues: {
       title: "",
+      category: "day-trip",
       description: "",
       duration: 1,
       price: 0,
@@ -92,6 +96,7 @@ const TourManagement = () => {
     setEditingTour(tour);
     form.reset({
       title: tour.title,
+      category: tour.category,
       description: tour.description,
       duration: tour.duration,
       price: tour.price,
@@ -114,6 +119,7 @@ const TourManagement = () => {
   const onSubmit = (data: TourFormValues) => {
     const payload: any = {
       title: data.title,
+      category: data.category,
       description: data.description,
       duration: data.duration,
       price: data.price,
@@ -160,9 +166,11 @@ const TourManagement = () => {
       tour.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       (tour.location &&
         tour.location.toLowerCase().includes(searchTerm.toLowerCase()));
+    const matchesCategory =
+      categoryFilter === "all" || tour.category === categoryFilter;
     const matchesDifficulty =
       difficultyFilter === "all" || tour.difficulty === difficultyFilter;
-    return matchesSearch && matchesDifficulty;
+    return matchesSearch && matchesCategory && matchesDifficulty;
   });
 
   const getDifficultyColor = (difficulty: string) => {
@@ -173,6 +181,19 @@ const TourManagement = () => {
         return "bg-yellow-500 text-white hover:bg-yellow-600";
       case "Challenging":
         return "bg-red-500 text-white hover:bg-red-600";
+      default:
+        return "bg-gray-500 text-white hover:bg-gray-600";
+    }
+  };
+
+  const getCategoryColor = (category: TourCategory) => {
+    switch (category) {
+      case "mount-kenya":
+        return "bg-blue-500 text-white hover:bg-blue-600";
+      case "day-trip":
+        return "bg-purple-500 text-white hover:bg-purple-600";
+      case "safaris":
+        return "bg-orange-500 text-white hover:bg-orange-600";
       default:
         return "bg-gray-500 text-white hover:bg-gray-600";
     }
@@ -209,7 +230,7 @@ const TourManagement = () => {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
             <div className="md:col-span-2 relative">
               <Search className="h-4 w-4 absolute left-3 top-3 text-gray-400" />
               <Input
@@ -219,6 +240,17 @@ const TourManagement = () => {
                 className="pl-10"
               />
             </div>
+            <Select value={categoryFilter} onValueChange={setCategoryFilter}>
+              <SelectTrigger>
+                <SelectValue placeholder="Category" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Categories</SelectItem>
+                <SelectItem value="mount-kenya">Mount Kenya</SelectItem>
+                <SelectItem value="day-trip">Day Trip</SelectItem>
+                <SelectItem value="safaris">Safaris</SelectItem>
+              </SelectContent>
+            </Select>
             <Select
               value={difficultyFilter}
               onValueChange={setDifficultyFilter}
@@ -283,6 +315,34 @@ const TourManagement = () => {
                           <FormControl>
                             <Input placeholder="Enter tour title" {...field} />
                           </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="category"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Category *</FormLabel>
+                          <Select
+                            onValueChange={field.onChange}
+                            value={field.value}
+                          >
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select category" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              <SelectItem value="mount-kenya">
+                                Mount Kenya
+                              </SelectItem>
+                              <SelectItem value="day-trip">Day Trip</SelectItem>
+                              <SelectItem value="safaris">Safaris</SelectItem>
+                            </SelectContent>
+                          </Select>
                           <FormMessage />
                         </FormItem>
                       )}
@@ -492,6 +552,7 @@ const TourManagement = () => {
                 <TableHeader>
                   <TableRow>
                     <TableHead>Tour</TableHead>
+                    <TableHead>Category</TableHead>
                     <TableHead>Duration</TableHead>
                     <TableHead>Price</TableHead>
                     <TableHead>Difficulty</TableHead>
@@ -526,6 +587,11 @@ const TourManagement = () => {
                             )}
                           </div>
                         </div>
+                      </TableCell>
+                      <TableCell>
+                        <Badge className={getCategoryColor(tour.category)}>
+                          {getCategoryLabel(tour.category)}
+                        </Badge>
                       </TableCell>
                       <TableCell>{tour.duration} days</TableCell>
                       <TableCell>${tour.price}</TableCell>
@@ -578,11 +644,14 @@ const TourManagement = () => {
                         <Mountain className="h-12 w-12 text-white" />
                       </div>
                     )}
-                    <Badge
-                      className={`absolute top-2 right-2 ${getDifficultyColor(tour.difficulty)}`}
-                    >
-                      {tour.difficulty}
-                    </Badge>
+                    <div className="absolute top-2 right-2 flex gap-2">
+                      <Badge className={getCategoryColor(tour.category)}>
+                        {getCategoryLabel(tour.category)}
+                      </Badge>
+                      <Badge className={getDifficultyColor(tour.difficulty)}>
+                        {tour.difficulty}
+                      </Badge>
+                    </div>
                   </div>
                   <CardContent className="p-4">
                     <h3 className="font-bold text-lg mb-2">{tour.title}</h3>
