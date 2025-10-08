@@ -36,6 +36,8 @@ export async function PATCH(request: NextRequest) {
       title: body.title,
       description: body.description,
       duration: Number(body.duration),
+      category: body.category,
+      location: body.location,
       difficulty: body.difficulty,
       price: Number(body.price),
       highlights: body.highlights || [],

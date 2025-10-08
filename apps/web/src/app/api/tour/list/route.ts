@@ -10,7 +10,10 @@ function urlFor(source: SanityImageSource) {
 
 export async function GET(request: NextRequest) {
   try {
+
+
     const searchParams = request.nextUrl.searchParams;
+          const category = searchParams.get("category");
     const difficulty = searchParams.get("difficulty");
     const minPrice = searchParams.get("minPrice");
     const maxPrice = searchParams.get("maxPrice");
@@ -19,6 +22,7 @@ export async function GET(request: NextRequest) {
     let query = `*[_type == "tour"`;
     const filters: string[] = [];
 
+    if (category) filters.push(`category == "${category}"`);
     if (difficulty) filters.push(`difficulty == "${difficulty}"`);
     if (minPrice) filters.push(`price >= ${minPrice}`);
     if (maxPrice) filters.push(`price <= ${maxPrice}`);
@@ -35,6 +39,8 @@ export async function GET(request: NextRequest) {
       description,
       duration,
       difficulty,
+      location,
+      category,
       price,
       "imageUrl": image.asset->url,
       highlights,
