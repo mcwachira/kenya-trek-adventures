@@ -25,7 +25,7 @@ const fetchToursByCategory = async (
   if (filters?.minPrice) params.append("minPrice", filters.minPrice.toString());
   if (filters?.maxPrice) params.append("maxPrice", filters.maxPrice.toString());
 
-  const url = `/api/tour/list${params.toString() ? `?${params.toString()}` : ""}`;
+  const url = `/api/tour/list/${params.toString() ? `?${params.toString()}` : ""}`;
   const response = await fetch(url);
   const data = await response.json();
 
