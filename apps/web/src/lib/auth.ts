@@ -53,6 +53,14 @@ export const signUpSchema = z
 
 export const tourSchema = z.object({
   title: z.string().min(3, "Title must be at least 3 characters"),
+  category: z
+    .enum(["mount-kenya", "day-trip", "safaris"], {
+      message: "Invalid category",
+    })
+    .or(z.undefined())
+    .refine((val) => val !== undefined, {
+      message: "Please select a category",
+    }),
   description: z.string().min(10, "Description must be at least 10 characters"),
   duration: z.number().min(1, "Duration must be at least 1 day"),
   price: z.number().min(0, "Price must be positive"),
