@@ -1,6 +1,7 @@
-import { defineField, defineType } from "sanity";
+// sanity/schemas/blogPost.ts
+import { defineType, defineField } from "sanity";
 
-export const blogPost = defineType({
+export default defineType({
   name: "blogPost",
   title: "Blog Post",
   type: "document",
@@ -9,38 +10,31 @@ export const blogPost = defineType({
       name: "title",
       title: "Title",
       type: "string",
-      validation: (rule) => rule.required(),
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: "slug",
       title: "Slug",
       type: "slug",
-      options: { source: "title" },
-      validation: (rule) => rule.required(),
+      options: {
+        source: "title",
+        maxLength: 96,
+      },
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
-      name: "categories",
-      title: "Categories",
-      type: "array",
-      of: [{ type: "reference", to: [{ type: "category" }] }],
-    }),
-    defineField({
-      name: "author",
-      title: "Author",
-      type: "reference",
-      to: [{ type: "author" }],
-      validation: (rule) => rule.required(),
-    }),
-    defineField({
-      name: "publishedAt",
-      title: "Published At",
-      type: "datetime",
+      name: "excerpt",
+      title: "Excerpt",
+      type: "text",
+      rows: 3,
     }),
     defineField({
       name: "mainImage",
       title: "Main Image",
       type: "image",
-      options: { hotspot: true },
+      options: {
+        hotspot: true,
+      },
       fields: [
         {
           name: "alt",
@@ -50,22 +44,26 @@ export const blogPost = defineType({
       ],
     }),
     defineField({
-      name: "excerpt",
-      title: "Excerpt",
-      type: "text",
-      rows: 3,
+      name: "author",
+      title: "Author",
+      type: "reference",
+      to: [{ type: "author" }],
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
-      name: "content",
-      title: "Content",
+      name: "categories",
+      title: "Categories",
       type: "array",
-      of: [{ type: "block" }],
+      of: [{ type: "reference", to: [{ type: "category" }] }],
     }),
     defineField({
       name: "tags",
       title: "Tags",
       type: "array",
       of: [{ type: "string" }],
+      options: {
+        layout: "tags",
+      },
     }),
     defineField({
       name: "status",
@@ -82,43 +80,53 @@ export const blogPost = defineType({
       initialValue: "draft",
       validation: (Rule) => Rule.required(),
     }),
-    // 🔍 SEO Fields
+    defineField({
+      name: "content",
+      title: "Content",
+      type: "text", // or 'array' for block content
+    }),
+    defineField({
+      name: "publishedAt",
+      title: "Published At",
+      type: "datetime",
+    }),
     defineField({
       name: "metaTitle",
       title: "Meta Title",
       type: "string",
-      description: "Used for SEO & browser title. Ideally under 60 characters.",
+      description: "SEO title (leave empty to use post title)",
     }),
     defineField({
       name: "metaDescription",
       title: "Meta Description",
       type: "text",
-      rows: 2,
-      description:
-        "Used for SEO and social sharing. Ideally under 160 characters.",
+      rows: 3,
+      description: "SEO description",
     }),
     defineField({
       name: "ogImage",
-      title: "OG Image",
+      title: "Open Graph Image",
       type: "image",
-      description: "Image used for social sharing (Open Graph).",
-      options: { hotspot: true },
+      description: "Image for social media sharing",
+      options: {
+        hotspot: true,
+      },
+    }),
+    defineField({
+      name: "views",
+      title: "Views",
+      type: "number",
+      readOnly: true,
+      initialValue: 0,
+      description: "Number of times this post has been viewed",
     }),
   ],
-
-  orderings: [
-    {
-      title: "Published Date, New",
-      name: "publishedAtDesc",
-      by: [{ field: "publishedAt", direction: "desc" }],
-    },
-  ],
-
   preview: {
     select: {
       title: "title",
       author: "author.name",
       media: "mainImage",
+      status: "status",
     },
     prepare(selection: {
       title: string;
