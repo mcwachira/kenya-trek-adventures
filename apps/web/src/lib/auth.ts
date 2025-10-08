@@ -53,16 +53,16 @@ export const signUpSchema = z
 
 export const tourSchema = z.object({
   title: z.string().min(3, "Title must be at least 3 characters"),
-  description: z.string().min(20, "Description must be at least 20 characters"),
-  duration: z.string().min(1, "Duration is required"),
-  price: z.string().min(1, "Price is required"),
+  description: z.string().min(10, "Description must be at least 10 characters"),
+  duration: z.number().min(1, "Duration must be at least 1 day"),
+  price: z.number().min(0, "Price must be positive"),
   difficulty: z.enum(["Easy", "Moderate", "Challenging"]),
-  category: z.enum(["mount-kenya", "safari", "day-trip"]),
   location: z.string().min(2, "Location is required"),
-  maxParticipants: z.number().min(1, "Must have at least 1 participant"),
-  status: z.enum(["active", "inactive"]),
-  highlights: z.string().min(5, "Add at least one highlight"),
-  included: z.string().min(5, "Add at least one included item"),
+  elevation: z.string().optional(),
+  route: z.string().optional(),
+  highlights: z.string().optional(),
+  included: z.string().optional(),
+  excluded: z.string().optional(),
 });
 
 export const companySchema = z.object({
