@@ -12,6 +12,19 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
 
+    // Validate category
+    const validCategories = ["mount-kenya", "day-trip", "safaris"];
+    if (!body.category || !validCategories.includes(body.category)) {
+      return NextResponse.json(
+        {
+          success: false,
+          error:
+            "Invalid category. Must be one of: mount-kenya, day-trip, safaris",
+        },
+        { status: 400 },
+      );
+    }
+
     //generate slug if not provided
 
     const slug = body.slug || generateSlug(body.title);
@@ -40,10 +53,12 @@ export async function POST(request: NextRequest) {
         _type: "slug",
         current: slug,
       },
+      category: body.category,
       description: body.description,
       duration: Number(body.duration),
       difficulty: body.difficulty,
       price: Number(body.price),
+      location: body.location || "",
       highlights: body.highlights || [],
       elevation: body.elevation || "",
       route: body.route || "",
