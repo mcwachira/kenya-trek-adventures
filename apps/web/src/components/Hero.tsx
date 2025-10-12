@@ -1,4 +1,3 @@
-// components/Hero.tsx
 "use client";
 
 import { Button } from "@/components/ui/button";
@@ -14,7 +13,7 @@ interface HeroProps {
 
 const Hero = ({ onBookNow }: HeroProps) => {
   const { t } = useTranslation();
-    console.log("HeroImage:", HeroImage);
+  console.log("HeroImage:", HeroImage);
   return (
     <section className="relative min-h-screen  flex items-center justify-center overflow-hidden">
       {/* Background Image with Overlay */}
