@@ -1,11 +1,8 @@
 import { NextResponse } from "next/server";
 import { client } from "@/sanity/lib/client";
-export async function GET(
-  req: Request,
-  { params }: { params: { slug: string } },
-) {
+export async function GET(req: Request, context: { params: { slug: string } }) {
   try {
-    const { slug } = params;
+    const { slug } = context.params;
 
     if (!slug) {
       return NextResponse.json(
