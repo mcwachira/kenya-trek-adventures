@@ -1,15 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Bell, AlertCircle, CheckCircle, Clock, Mail } from "lucide-react";
-
-interface Booking {
-  id: number;
-  name: string;
-  service: string;
-  status: string;
-  date: string;
-  createdAt: string;
-}
+import { Booking } from "@/hooks/useBooking";
 
 interface Contact {
   id: number;
@@ -28,7 +20,7 @@ const NotificationCenter = ({
   contacts,
 }: NotificationCenterProps) => {
   const recentBookings = bookings.filter((booking) => {
-    const bookingDate = new Date(booking.createdAt);
+    const bookingDate = new Date(booking.created_at);
     const now = new Date();
     const diffTime = Math.abs(now.getTime() - bookingDate.getTime());
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
@@ -133,7 +125,7 @@ const NotificationCenter = ({
                     <p className="text-xs text-gray-500">by {booking.name}</p>
                   </div>
                   <Badge variant="outline" className="text-xs">
-                    {new Date(booking.createdAt).toLocaleDateString()}
+                    {new Date(booking.created_at).toLocaleDateString()}
                   </Badge>
                 </div>
               ))}

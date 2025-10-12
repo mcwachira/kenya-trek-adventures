@@ -1,14 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { DollarSign, CreditCard, TrendingUp } from "lucide-react";
-
-interface Booking {
-  id: number;
-  name: string;
-  service: string;
-  status: string;
-  createdAt: string;
-}
+import { Booking } from "@/hooks/useBooking";
 
 interface PaymentManagementProps {
   bookings: Booking[];

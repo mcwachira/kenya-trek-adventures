@@ -11,19 +11,7 @@ import {
   // ArrowDownRight,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-
-interface Booking {
-  id: number;
-  name: string;
-  email: string;
-  phone: string;
-  service: string;
-  participants: string;
-  date: string;
-  message: string;
-  status: string;
-  createdAt: string;
-}
+import { Booking } from "@/hooks/useBooking";
 
 interface Contact {
   id: number;
@@ -36,8 +24,8 @@ interface Contact {
 }
 
 interface DashboardOverviewProps {
-  bookings: Booking[];
   contacts: Contact[];
+  booking: Booking[];
 }
 
 const DashboardOverView = ({ bookings, contacts }: DashboardOverviewProps) => {
