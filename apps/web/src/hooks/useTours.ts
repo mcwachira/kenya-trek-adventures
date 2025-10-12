@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Tour, TourCategory, TourFormData } from "@/types/";
 import { toast } from "sonner";
+import { useCurrency } from "@/hooks/useCurrency";
 
 //Helper function to convert file to base64
 
@@ -112,16 +113,24 @@ export const useToursData = (filters?: {
   maxPrice?: number;
 }) => {
   const queryClient = useQueryClient();
+  const { getConvertedAmount, currency } = useCurrency();
 
-  // Fetch tours
+  // Fetch tours with currency conversion
   const {
-    data: tours = [],
+    data: rawTours = [],
     isLoading,
     error,
   } = useQuery({
-    queryKey: ["tours", filters],
+    queryKey: ["tours", filters, currency], // Include currency in query key for auto-refresh
     queryFn: () => fetchTours(filters),
   });
+
+  // Add converted prices to tours
+  const tours = rawTours.map((tour) => ({
+    ...tour,
+    originalPrice: tour.price, // Keep original USD price
+    displayPrice: getConvertedAmount(tour.price), // Converted price
+  }));
 
   // Create tour mutation
   const addTourMutation = useMutation({
@@ -134,6 +143,7 @@ export const useToursData = (filters?: {
       toast.error(error.message || "Failed to create tour");
     },
   });
+
   // Update tour mutation
   const updateTourMutation = useMutation({
     mutationFn: updateTour,

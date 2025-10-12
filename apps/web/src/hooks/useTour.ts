@@ -1,6 +1,7 @@
 // hooks/useTour.ts
 import { useQuery } from "@tanstack/react-query";
 import { Tour } from "@/types";
+import { useCurrency } from "@/hooks/useCurrency";
 
 // Fetch single tour by ID or slug
 const fetchTour = async (id: string): Promise<Tour> => {
@@ -39,22 +40,40 @@ const fetchRelatedTours = async (
 
 // Hook to fetch a single tour
 export const useTour = (id: string | undefined) => {
+  const { getConvertedAmount, currency } = useCurrency();
+
   return useQuery({
-    queryKey: ["tour", id],
-    queryFn: () => fetchTour(id!),
-    enabled: !!id, // Only run if id is provided
+    queryKey: ["tour", id, currency],
+    queryFn: async () => {
+      const tour = await fetchTour(id!);
+      return {
+        ...tour,
+        originalPrice: tour.price,
+        displayPrice: getConvertedAmount(tour.price),
+      };
+    },
+    enabled: !!id,
   });
 };
 
-// Hook to fetch related tours
+// Hook to fetch related tours with currency conversion
 export const useRelatedTours = (
   tourId: string | undefined,
   difficulty?: string,
   limit: number = 3,
 ) => {
+  const { getConvertedAmount, currency } = useCurrency();
+
   return useQuery({
-    queryKey: ["related-tours", tourId, difficulty, limit],
-    queryFn: () => fetchRelatedTours(tourId!, difficulty, limit),
-    enabled: !!tourId, // Only run if tourId is provided
+    queryKey: ["related-tours", tourId, difficulty, limit, currency],
+    queryFn: async () => {
+      const tours = await fetchRelatedTours(tourId!, difficulty, limit);
+      return tours.map((tour) => ({
+        ...tour,
+        originalPrice: tour.price,
+        displayPrice: getConvertedAmount(tour.price),
+      }));
+    },
+    enabled: !!tourId,
   });
 };
