@@ -37,13 +37,15 @@ export function useAppSettings() {
 
       const { data, error } = await supabase
         .from("app_settings")
-        .upsert({
-          key,
-          value,
-          updated_by: user?.id,
-          updated_at: new Date().toISOString(),
-        })
-        .eq("key", key)
+        .upsert(
+          {
+            key,
+            value,
+            updated_by: user?.id,
+            updated_at: new Date().toISOString(),
+          },
+          { onConflict: "key" }, // ✅ tells Supabase to update if key already exists
+        )
         .select()
         .single();
 
