@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Loader2, LogOut, User } from "lucide-react";
+import { Loader2, LogOut } from "lucide-react";
 import DashboardOverview from "@/components/dashboard/DashboardOverview";
 import BookingManagement from "@/components/dashboard/BookingManagement";
 import CustomerManagement from "@/components/dashboard/CustomerManagement";

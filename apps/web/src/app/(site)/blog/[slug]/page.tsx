@@ -1,6 +1,3 @@
-"use client";
-
-import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
@@ -23,7 +20,6 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Separator } from "@/components/ui/separator";
 import { toast } from "sonner";
-import { BlogPost } from "@/types";
 import { useBlogPost } from "@/hooks/useBlogPost";
 
 // Format date helper

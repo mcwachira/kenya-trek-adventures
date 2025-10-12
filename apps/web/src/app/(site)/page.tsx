@@ -1,5 +1,5 @@
 "use client";
-import FeaturedExpeditions from "@/components/FeaturedExpeditions";
+// import FeaturedExpeditions from "@/components/FeaturedExpeditions";
 import GuideProfile from "@/components/GuideProfile";
 import Hero from "@/components/Hero";
 import SafetySection from "@/components/SafetySection";
