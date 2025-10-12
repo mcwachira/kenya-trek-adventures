@@ -5,9 +5,9 @@ import { createClient } from "@/lib/supabase/client";
 import { toast } from "sonner";
 import { Database } from "@/types";
 
-type Booking = Database["public"]["Tables"]["bookings"]["Row"];
-type BookingInsert = Database["public"]["Tables"]["bookings"]["Insert"];
-type BookingUpdate = Database["public"]["Tables"]["bookings"]["Update"];
+export type Booking = Database["public"]["Tables"]["bookings"]["Row"];
+export type BookingInsert = Database["public"]["Tables"]["bookings"]["Insert"];
+export type BookingUpdate = Database["public"]["Tables"]["bookings"]["Update"];
 
 const supabase = createClient();
 
