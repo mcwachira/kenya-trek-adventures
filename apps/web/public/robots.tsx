@@ -1,6 +1,8 @@
-User-agent: *
-Allow: /
-Disallow: /api/
-Disallow: /admin/
+// # robots.txt for Kenya Trek Adventures
+// User-agent: *
+// Allow: /
+// Disallow: /api/
+// Disallow: /admin/
 
-Sitemap: https://www.kenyatrekadentures.com/sitemap.xml
+// # Sitemap location
+// Sitemap: https://www.kenyatrekadventures.com/sitemap.xml
