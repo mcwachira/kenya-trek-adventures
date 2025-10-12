@@ -241,7 +241,7 @@ const DayTrips = () => {
       {showBooking && (
         <BookingForm
           onClose={() => setShowBooking(false)}
-          serviceName={selectedTrip || "Kenya Day Trip"}
+          // serviceName={selectedTrip || "Kenya Day Trip"}
         />
       )}
     </>

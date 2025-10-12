@@ -190,7 +190,7 @@ const MountKenya = () => {
       {showBooking && (
         <BookingForm
           onClose={() => setShowBooking(false)}
-          serviceName={selectedRoute || "Mount Kenya Expedition"}
+          // serviceName={selectedRoute || "Mount Kenya Expedition"}
         />
       )}
     </>

@@ -246,7 +246,7 @@ const Safaris = () => {
       {showBooking && (
         <BookingForm
           onClose={() => setShowBooking(false)}
-          serviceName={selectedSafari || "Kenya Safari"}
+          // serviceName={selectedSafari || "Kenya Safari"}
         />
       )}
     </>
