@@ -40,11 +40,13 @@ import {
   Grid,
   List,
   Loader2,
+  DollarSign,
 } from "lucide-react";
-import { Tour, TourCategory, getCategoryLabel } from "@/types";
 import { useToursData } from "@/hooks/useTours";
+import { useCurrency } from "@/hooks/useCurrency";
 import { TourFormValues, tourSchema } from "@/lib/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Tour, TourCategory, getCategoryLabel } from "@/types";
 
 const TourManagement = () => {
   const {
@@ -59,6 +61,8 @@ const TourManagement = () => {
   } = useToursData();
 
   console.log(tours);
+
+  const { formatPrice, currency, currencySymbol } = useCurrency();
 
   const [showEditor, setShowEditor] = useState(false);
   const [editingTour, setEditingTour] = useState<Tour | null>(null);
@@ -204,9 +208,12 @@ const TourManagement = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h2 className="text-3xl font-bold text-green-800">Tour Management</h2>
-          <p className="text-gray-600 mt-1">
-            Manage all tours, safaris, and day trips
+          <h2 className="text-3xl font-bold text-green-800 dark:text-green-400">
+            Tour Management
+          </h2>
+          <p className="text-gray-600 dark:text-gray-300 mt-1">
+            Manage all tours, safaris, and day trips • Displaying prices in{" "}
+            {currency.toUpperCase()} ({currencySymbol})
           </p>
         </div>
         <Button
@@ -221,10 +228,24 @@ const TourManagement = () => {
         </Button>
       </div>
 
+      {/* Currency Info Alert */}
+      <Card className="border-l-4 border-l-green-500 bg-green-50 dark:bg-green-950">
+        <CardContent className="py-3">
+          <div className="flex items-center gap-2 text-sm">
+            <DollarSign className="h-4 w-4 text-green-600" />
+            <p className="text-green-800 dark:text-green-200">
+              <strong>Note:</strong> All tour prices are stored in USD. They're
+              automatically converted to {currency.toUpperCase()} for display
+              based on your settings.
+            </p>
+          </div>
+        </CardContent>
+      </Card>
+
       {/* Filters */}
       <Card className="shadow-lg">
         <CardHeader className="pb-4">
-          <CardTitle className="text-green-800 flex items-center gap-2">
+          <CardTitle className="text-green-800 dark:text-green-400 flex items-center gap-2">
             <Filter className="h-5 w-5" />
             Search & Filter Tours
           </CardTitle>
@@ -289,7 +310,7 @@ const TourManagement = () => {
       {showEditor && (
         <Card className="shadow-lg">
           <CardHeader>
-            <CardTitle className="text-green-800 flex items-center gap-2">
+            <CardTitle className="text-green-800 dark:text-green-400 flex items-center gap-2">
               {editingTour ? (
                 <Edit className="h-5 w-5" />
               ) : (
@@ -434,6 +455,10 @@ const TourManagement = () => {
                               />
                             </FormControl>
                             <FormMessage />
+                            <p className="text-xs text-gray-500">
+                              Enter price in USD. Will display as{" "}
+                              {formatPrice(field.value || 0)}
+                            </p>
                           </FormItem>
                         )}
                       />
@@ -537,7 +562,7 @@ const TourManagement = () => {
       {/* Tours Display */}
       <Card className="shadow-lg">
         <CardHeader>
-          <CardTitle className="text-green-800">
+          <CardTitle className="text-green-800 dark:text-green-400">
             All Tours ({filteredTours.length})
           </CardTitle>
         </CardHeader>
@@ -554,7 +579,7 @@ const TourManagement = () => {
                     <TableHead>Tour</TableHead>
                     <TableHead>Category</TableHead>
                     <TableHead>Duration</TableHead>
-                    <TableHead>Price</TableHead>
+                    <TableHead>Price ({currency.toUpperCase()})</TableHead>
                     <TableHead>Difficulty</TableHead>
                     <TableHead>Actions</TableHead>
                   </TableRow>
@@ -594,7 +619,9 @@ const TourManagement = () => {
                         </Badge>
                       </TableCell>
                       <TableCell>{tour.duration} days</TableCell>
-                      <TableCell>${tour.price}</TableCell>
+                      <TableCell className="font-semibold">
+                        {formatPrice(tour.price)}
+                      </TableCell>
                       <TableCell>
                         <Badge className={getDifficultyColor(tour.difficulty)}>
                           {tour.difficulty}
@@ -662,8 +689,8 @@ const TourManagement = () => {
                       </div>
                     )}
                     <div className="flex justify-between items-center mb-3">
-                      <span className="text-lg font-bold text-green-700">
-                        ${tour.price}
+                      <span className="text-lg font-bold text-green-700 dark:text-green-400">
+                        {formatPrice(tour.price)}
                       </span>
                       <span className="text-sm text-gray-600">
                         {tour.duration} days
