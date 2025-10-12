@@ -10,10 +10,8 @@ function urlFor(source: SanityImageSource) {
 
 export async function GET(request: NextRequest) {
   try {
-
-
     const searchParams = request.nextUrl.searchParams;
-          const category = searchParams.get("category");
+    const category = searchParams.get("category");
     const difficulty = searchParams.get("difficulty");
     const minPrice = searchParams.get("minPrice");
     const maxPrice = searchParams.get("maxPrice");
@@ -59,12 +57,11 @@ export async function GET(request: NextRequest) {
       imageUrl: tour.imageUrl || null,
     }));
 
-
     return NextResponse.json({
       success: true,
       tours: toursWithImageUrls,
     });
-  }catch (error: any) {
+  } catch (error: any) {
     console.error("❌ Error fetching tours:", error.message || error);
     return NextResponse.json(
       {
@@ -75,3 +72,4 @@ export async function GET(request: NextRequest) {
       { status: 500 },
     );
   }
+}
