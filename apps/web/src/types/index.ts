@@ -222,18 +222,6 @@ export const getCategoryLabel = (category: TourCategory): string => {
   }
 };
 
-// SanityImage interface (add if not already in your types)
-export interface SanityImage {
-  _type: "image";
-  asset: {
-    _id?: string;
-    url?: string;
-    _type?: "reference" | "sanity.imageAsset";
-    _ref?: string;
-  };
-  alt?: string;
-}
-
 export interface Database {
   public: {
     Tables: {

@@ -1,13 +1,9 @@
-// @ts-nocheck
-"use client";
-
 /**
  * Sanity Studio configuration
  */
 import { visionTool } from "@sanity/vision";
 import { defineConfig } from "sanity";
 import { structureTool } from "sanity/structure";
-
 import { apiVersion, dataset, projectId } from "./src/sanity/env";
 import { schema } from "./src/sanity/schema";
 import { structure } from "./src/sanity/structure";
