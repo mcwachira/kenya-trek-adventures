@@ -18,8 +18,8 @@ const Testimonials = () => {
       rating: 5,
       comment:
         "We witnessed the Great Migration and saw all of the Big Five! The cultural visit to a Maasai village was a highlight. Professional service from start to finish.",
-      image:
-        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face",
+      image: "",
+      // "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face",
     },
     {
       name: "Maria Rodriguez",
@@ -28,8 +28,8 @@ const Testimonials = () => {
       rating: 5,
       comment:
         "They created a perfect 7-day itinerary combining Mount Kenya climbing with Amboseli safari. Excellent organization and unforgettable memories!",
-      image:
-        "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face",
+      image: "",
+      // "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face",
     },
   ];
 
