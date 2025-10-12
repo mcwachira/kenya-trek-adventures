@@ -19,7 +19,13 @@ export async function GET(req: Request) {
         tags,
         metaTitle,
         metaDescription,
-        "mainImage": mainImage.asset->url,
+        "mainImage": {
+             "asset": {
+               "_id": mainImage.asset->_id,
+               "url": mainImage.asset->url
+             },
+             "alt": mainImage.alt
+           },
         "author": author->{
           name,
           "slug": slug.current,

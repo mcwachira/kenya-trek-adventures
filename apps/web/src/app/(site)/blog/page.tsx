@@ -45,7 +45,7 @@ const BlogPostCard = ({ blog }: { blog: BlogPostType }) => {
         <div className="relative aspect-video bg-muted overflow-hidden">
           {blog.mainImage ? (
             <Image
-              src={blog.mainImage}
+              src={blog.mainImage.asset.url}
               alt={blog.mainImage?.alt || blog.title}
               width={800}
               height={450}
