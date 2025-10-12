@@ -14,6 +14,7 @@ import { Clock, MapPin, Users, Camera } from "lucide-react";
 import Image from "next/image";
 import BookingForm from "@/components/BookingForm";
 import { useToursByCategory } from "@/hooks/useToursByCategory";
+import { useCurrency } from "@/hooks/useCurrency";
 
 const DayTrips = () => {
   const [showBooking, setShowBooking] = useState(false);
@@ -22,6 +23,8 @@ const DayTrips = () => {
   const { tours, isLoading, error } = useToursByCategory({
     category: "day-trip",
   });
+
+  const { formatPrice, currency, currencySymbol } = useCurrency();
 
   const handleBookTrip = (tripName: string) => {
     setSelectedTrip(tripName);
@@ -71,6 +74,9 @@ const DayTrips = () => {
               From wildlife encounters to cultural experiences, perfect for all
               ages
             </p>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">
+              Prices shown in {currency.toUpperCase()} ({currencySymbol})
+            </p>
           </div>
 
           {/* Loading & Error */}
@@ -104,7 +110,7 @@ const DayTrips = () => {
                         priority={index === 0}
                       />
                       <div className="absolute top-4 right-4 bg-orange-600 text-white px-3 py-1 rounded-full text-sm font-semibold">
-                        ${trip.price}
+                        {formatPrice(trip.price)}
                       </div>
                     </div>
                   ) : (

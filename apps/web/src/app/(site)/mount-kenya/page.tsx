@@ -9,19 +9,23 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Mountain, Clock, CheckCircle } from "lucide-react";
+import { Mountain, Clock, CheckCircle, Loader2 } from "lucide-react";
 import { useState } from "react";
 import Image from "next/image";
 import BookingForm from "@/components/BookingForm";
 import { useToursByCategory } from "@/hooks/useToursByCategory";
+import { useCurrency } from "@/hooks/useCurrency";
+import Link from "next/link";
 
 const MountKenya = () => {
   const [showBooking, setShowBooking] = useState(false);
   const [selectedRoute, setSelectedRoute] = useState("");
+
   const { tours, isLoading, error } = useToursByCategory({
     category: "mount-kenya",
   });
-  console.log(tours);
+
+  const { formatPrice, currency, currencySymbol } = useCurrency();
 
   const included = [
     "Professional mountain guide",
@@ -76,17 +80,32 @@ const MountKenya = () => {
               Each route offers unique experiences and challenges. All lead to
               Point Lenana summit.
             </p>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">
+              Prices shown in {currency.toUpperCase()} ({currencySymbol})
+            </p>
           </div>
 
-          {/* Loading & Error states */}
+          {/* Loading State */}
           {isLoading && (
-            <p className="text-center text-gray-500">Loading routes...</p>
+            <div className="flex justify-center items-center py-12">
+              <Loader2 className="h-8 w-8 animate-spin text-green-600" />
+            </div>
           )}
+
+          {/* Error State */}
           {error && (
-            <p className="text-center text-red-500">
-              Failed to load tours:{" "}
-              {error instanceof Error ? error.message : "Unknown error"}
-            </p>
+            <div className="text-center py-12">
+              <p className="text-red-500 mb-4">
+                Failed to load routes:{" "}
+                {error instanceof Error ? error.message : "Unknown error"}
+              </p>
+              <Button
+                variant="outline"
+                onClick={() => window.location.reload()}
+              >
+                Try Again
+              </Button>
+            </div>
           )}
 
           {/* Routes Grid */}
@@ -109,8 +128,8 @@ const MountKenya = () => {
                       />
                     </div>
                   ) : (
-                    <div className="w-full h-56 bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
-                      <Mountain className="h-10 w-10 text-gray-400" />
+                    <div className="w-full h-56 bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center">
+                      <Mountain className="h-10 w-10 text-white" />
                     </div>
                   )}
 
@@ -135,22 +154,29 @@ const MountKenya = () => {
                       </div>
 
                       <div className="text-2xl font-bold text-green-800 dark:text-green-400">
-                        ${route.price?.toLocaleString()}
-                        <span className="text-sm text-gray-600 dark:text-gray-300">
+                        {formatPrice(route.price)}
+                        <span className="text-sm text-gray-600 dark:text-gray-300 font-normal">
                           {" "}
                           / person
                         </span>
                       </div>
 
-                      <Button
-                        className="w-full bg-green-700 hover:bg-green-800 text-white"
-                        onClick={() => {
-                          setSelectedRoute(route.title);
-                          setShowBooking(true);
-                        }}
-                      >
-                        Book This Route
-                      </Button>
+                      <div className="flex gap-2">
+                        <Link href={`/tours/${route._id}`} className="flex-1">
+                          <Button variant="outline" className="w-full">
+                            View Details
+                          </Button>
+                        </Link>
+                        <Button
+                          className="flex-1 bg-green-700 hover:bg-green-800 text-white"
+                          onClick={() => {
+                            setSelectedRoute(route.title);
+                            setShowBooking(true);
+                          }}
+                        >
+                          Book Now
+                        </Button>
+                      </div>
                     </div>
                   </CardContent>
                 </Card>
@@ -158,10 +184,14 @@ const MountKenya = () => {
             </div>
           )}
 
+          {/* Empty State */}
           {!isLoading && !error && tours.length === 0 && (
-            <p className="text-center text-gray-500 mt-6">
-              No tours available for this category yet.
-            </p>
+            <div className="text-center py-12">
+              <Mountain className="h-16 w-16 text-gray-400 mx-auto mb-4" />
+              <p className="text-gray-500 dark:text-gray-400 text-lg">
+                No Mount Kenya tours available yet.
+              </p>
+            </div>
           )}
         </section>
 
@@ -187,12 +217,7 @@ const MountKenya = () => {
         </section>
       </div>
 
-      {showBooking && (
-        <BookingForm
-          onClose={() => setShowBooking(false)}
-          // serviceName={selectedRoute || "Mount Kenya Expedition"}
-        />
-      )}
+      {showBooking && <BookingForm onClose={() => setShowBooking(false)} />}
     </>
   );
 };

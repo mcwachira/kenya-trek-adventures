@@ -10,10 +10,19 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Binoculars, MapPin, Calendar, Camera, Users } from "lucide-react";
+import {
+  Binoculars,
+  MapPin,
+  Calendar,
+  Camera,
+  Users,
+  Loader2,
+} from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import BookingForm from "@/components/BookingForm";
 import { useToursByCategory } from "@/hooks/useToursByCategory";
+import { useCurrency } from "@/hooks/useCurrency";
 
 const Safaris = () => {
   const [showBooking, setShowBooking] = useState(false);
@@ -22,6 +31,8 @@ const Safaris = () => {
   const { tours, isLoading, error } = useToursByCategory({
     category: "safaris",
   });
+
+  const { formatPrice, currency, currencySymbol } = useCurrency();
 
   const handleBookSafari = (safariName: string) => {
     setSelectedSafari(safariName);
@@ -71,17 +82,32 @@ const Safaris = () => {
             <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
               Choose from Kenya&apos;s most breathtaking wildlife destinations.
             </p>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">
+              Prices shown in {currency.toUpperCase()} ({currencySymbol})
+            </p>
           </div>
 
-          {/* Loading & Error */}
+          {/* Loading State */}
           {isLoading && (
-            <p className="text-center text-gray-500">Loading safaris...</p>
+            <div className="flex justify-center items-center py-12">
+              <Loader2 className="h-8 w-8 animate-spin text-green-600" />
+            </div>
           )}
+
+          {/* Error State */}
           {error && (
-            <p className="text-center text-red-500">
-              Failed to load safaris:{" "}
-              {error instanceof Error ? error.message : "Unknown error"}
-            </p>
+            <div className="text-center py-12">
+              <p className="text-red-500 mb-4">
+                Failed to load safaris:{" "}
+                {error instanceof Error ? error.message : "Unknown error"}
+              </p>
+              <Button
+                variant="outline"
+                onClick={() => window.location.reload()}
+              >
+                Try Again
+              </Button>
+            </div>
           )}
 
           {/* Safaris Grid */}
@@ -104,12 +130,12 @@ const Safaris = () => {
                         priority={index === 0}
                       />
                       <div className="absolute top-4 right-4 bg-orange-600 text-white px-3 py-1 rounded-full text-sm font-semibold">
-                        ${tour.price || "N/A"}
+                        {formatPrice(tour.price)}
                       </div>
                     </div>
                   ) : (
-                    <div className="w-full aspect-video bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
-                      <Binoculars className="h-10 w-10 text-gray-400" />
+                    <div className="w-full aspect-video bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center">
+                      <Binoculars className="h-10 w-10 text-white" />
                     </div>
                   )}
 
@@ -142,26 +168,33 @@ const Safaris = () => {
                             Highlights:
                           </h4>
                           <div className="flex flex-wrap gap-2">
-                            {tour.highlights.map(
-                              (highlight: string, i: number) => (
+                            {tour.highlights
+                              .slice(0, 3)
+                              .map((highlight: string, i: number) => (
                                 <span
                                   key={i}
                                   className="bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-300 px-2 py-1 rounded-full text-xs"
                                 >
                                   {highlight}
                                 </span>
-                              ),
-                            )}
+                              ))}
                           </div>
                         </div>
                       )}
 
-                      <Button
-                        className="cursor-pointer w-full bg-green-700 hover:bg-green-800 text-white"
-                        onClick={() => handleBookSafari(tour.title)}
-                      >
-                        Book Safari
-                      </Button>
+                      <div className="flex gap-2">
+                        <Link href={`/tours/${tour._id}`} className="flex-1">
+                          <Button variant="outline" className="w-full">
+                            View Details
+                          </Button>
+                        </Link>
+                        <Button
+                          className="flex-1 cursor-pointer bg-green-700 hover:bg-green-800 text-white"
+                          onClick={() => handleBookSafari(tour.title)}
+                        >
+                          Book Safari
+                        </Button>
+                      </div>
                     </div>
                   </CardContent>
                 </Card>
@@ -169,10 +202,14 @@ const Safaris = () => {
             </div>
           )}
 
+          {/* Empty State */}
           {!isLoading && !error && tours.length === 0 && (
-            <p className="text-center text-gray-500 mt-6">
-              No safaris available at the moment.
-            </p>
+            <div className="text-center py-12">
+              <Binoculars className="h-16 w-16 text-gray-400 mx-auto mb-4" />
+              <p className="text-gray-500 dark:text-gray-400 text-lg">
+                No safaris available at the moment.
+              </p>
+            </div>
           )}
         </section>
 
@@ -235,7 +272,7 @@ const Safaris = () => {
                 Expert Guides
               </h4>
               <p className="text-gray-600 dark:text-gray-300 text-sm">
-                Experienced local guides ensure you don’t miss any hidden gems.
+                Experienced local guides ensure you don't miss any hidden gems.
               </p>
             </div>
           </div>
@@ -243,12 +280,7 @@ const Safaris = () => {
       </div>
 
       {/* Booking Modal */}
-      {showBooking && (
-        <BookingForm
-          onClose={() => setShowBooking(false)}
-          // serviceName={selectedSafari || "Kenya Safari"}
-        />
-      )}
+      {showBooking && <BookingForm onClose={() => setShowBooking(false)} />}
     </>
   );
 };
