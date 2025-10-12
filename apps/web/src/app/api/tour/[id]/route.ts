@@ -11,10 +11,10 @@ function urlFor(source: SanityImageSource) {
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } },
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
-    const { id } = params;
+    const { id } = await params;
 
     const query = `*[_type == "tour" && (_id == $id || slug.current == $id)][0] {
       _id,
