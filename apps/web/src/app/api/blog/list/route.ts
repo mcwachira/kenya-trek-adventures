@@ -32,7 +32,7 @@ export async function GET(req: Request) {
         }
       },
       "total": count(*[_type == "blogPost"])
-    }`;
+    }`; // ✅ ensure this backtick is here
 
     const result = await client.fetch(query, {
       offset,
