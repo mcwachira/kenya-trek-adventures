@@ -25,7 +25,7 @@ interface Contact {
 
 interface DashboardOverviewProps {
   contacts: Contact[];
-  booking: Booking[];
+  bookings: Booking[];
 }
 
 const DashboardOverView = ({ bookings, contacts }: DashboardOverviewProps) => {
@@ -33,7 +33,7 @@ const DashboardOverView = ({ bookings, contacts }: DashboardOverviewProps) => {
   const currentYear = new Date().getFullYear();
 
   const thisMonthBookings = bookings.filter((booking) => {
-    const bookingDate = new Date(booking.createdAt);
+    const bookingDate = new Date(booking.created_at);
     return (
       bookingDate.getMonth() === currentMonth &&
       bookingDate.getFullYear() === currentYear
@@ -302,7 +302,7 @@ const DashboardOverView = ({ bookings, contacts }: DashboardOverviewProps) => {
                     {booking.status}
                   </Badge>
                   <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                    {new Date(booking.createdAt).toLocaleDateString()}
+                    {new Date(booking.created_at).toLocaleDateString()}
                   </p>
                 </div>
               </div>
